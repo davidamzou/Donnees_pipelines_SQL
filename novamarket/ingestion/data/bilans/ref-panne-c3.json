@@ -1,0 +1,47 @@
+{
+  "run": "ref-panne-c3",
+  "scenario": "panne",
+  "concurrence_max": 3,
+  "tentatives_max": 4,
+  "timeout_s": 1.0,
+  "debut": "2026-11-24T10:49:59.817+00:00",
+  "fin": "2026-11-24T10:50:02.638+00:00",
+  "duree_s": 2.82,
+  "statut": "echec",
+  "publie": false,
+  "pages_attendues": 6,
+  "pages_recues": 5,
+  "pages_en_echec": [
+    6
+  ],
+  "requetes_http": 9,
+  "reprises": 3,
+  "concurrence_observee": 3,
+  "tentatives_par_page": {
+    "1": 1,
+    "2": 1,
+    "3": 1,
+    "4": 1,
+    "5": 1,
+    "6": 4
+  },
+  "incidents": {
+    "http_503": 4
+  },
+  "lignes_examinees": 0,
+  "lignes_valides": 0,
+  "lignes_rejetees": 0,
+  "motifs_rejet": {},
+  "fichiers": {
+    "raw": "ingestion/data/raw/ref-panne-c3.jsonl",
+    "journal": "ingestion/data/logs/ref-panne-c3.log",
+    "bilan": "ingestion/data/bilans/ref-panne-c3.json"
+  },
+  "erreur": "page 6 : http_503 après 4 tentative(s)",
+  "controles": {
+    "toutes_pages_recues": false,
+    "lignes_equilibrees": true,
+    "concurrence_respectee": true,
+    "requetes_coherentes": true
+  }
+}

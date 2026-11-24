@@ -1,0 +1,55 @@
+{
+  "run": "ref-atelier-c3",
+  "scenario": "atelier",
+  "concurrence_max": 3,
+  "tentatives_max": 4,
+  "timeout_s": 1.0,
+  "debut": "2026-11-24T10:49:58.103+00:00",
+  "fin": "2026-11-24T10:49:59.631+00:00",
+  "duree_s": 1.529,
+  "statut": "succes",
+  "publie": true,
+  "pages_attendues": 6,
+  "pages_recues": 6,
+  "pages_en_echec": [],
+  "requetes_http": 9,
+  "reprises": 3,
+  "concurrence_observee": 3,
+  "tentatives_par_page": {
+    "1": 1,
+    "2": 2,
+    "3": 2,
+    "4": 2,
+    "5": 1,
+    "6": 1
+  },
+  "incidents": {
+    "http_429": 1,
+    "json_invalide": 1,
+    "timeout": 1
+  },
+  "lignes_examinees": 24,
+  "lignes_valides": 20,
+  "lignes_rejetees": 4,
+  "motifs_rejet": {
+    "champ_manquant:supplier_id": 1,
+    "doublon:offer_id": 1,
+    "produit_hors_catalogue": 1,
+    "type_invalide:price_cents": 1
+  },
+  "fichiers": {
+    "raw": "ingestion/data/raw/ref-atelier-c3.jsonl",
+    "journal": "ingestion/data/logs/ref-atelier-c3.log",
+    "bilan": "ingestion/data/bilans/ref-atelier-c3.json",
+    "valid": "ingestion/data/valid/offres.jsonl",
+    "valid_run": "ingestion/data/valid/runs/ref-atelier-c3.jsonl",
+    "rejected": "ingestion/data/rejected/ref-atelier-c3.jsonl"
+  },
+  "erreur": null,
+  "controles": {
+    "toutes_pages_recues": true,
+    "lignes_equilibrees": true,
+    "concurrence_respectee": true,
+    "requetes_coherentes": true
+  }
+}

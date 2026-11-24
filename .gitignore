@@ -25,3 +25,8 @@ logs/
 # Éditeurs
 .idea/
 *.swp
+
+# Python (S3 ingestion)
+.venv/
+__pycache__/
+*.pyc

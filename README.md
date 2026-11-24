@@ -25,6 +25,14 @@ Travaux pratiques SQL (S1 → S6) sur PostgreSQL 17, avec dbt (S4–S5) et Metab
 │   │   ├── generer.sql    # générateur fourni (schéma benchmark)
 │   │   ├── sql/           # 20_…23_*.sql, requetes/, run_s3.sh, synthese.py
 │   │   └── resultats/     # plans EXPLAIN complets, mesures.csv, synthese.md
+│   ├── ingestion/         # S3 · collecteur asynchrone de l'API fournisseur
+│   │   ├── CONTRAT.md     # Contrat HTTP et règles de données (M1)
+│   │   ├── SOLUTION_S3_INGESTION.md
+│   │   ├── api/           # Dockerfile à 2 cibles : API « fournisseur » + client « collecteur »
+│   │   ├── src/           # collecteur.py, validation.py, journalisation.py
+│   │   ├── tests/         # disponibilite.py + tests unitaires et d'intégration
+│   │   └── data/          # raw/ valid/ rejected/ logs/ bilans/ (runs de référence)
+│   ├── requirements-v3.txt # dépendances Python 3.12 (aiohttp, psycopg)
 │   ├── REFERENCE_SQL.md   # Référence cumulative (version S2)
 │   └── SAUVEGARDE_SQL.md  # Sauvegarde / restauration
 ├── ressources/
@@ -68,3 +76,27 @@ docker compose exec -T postgres psql -X -v ON_ERROR_STOP=1 -U atelier -d novamar
 - Durées indicatives sur un portable (2 CPU / 2 Go pour le conteneur) : S1 + S2 < 10 s, génération ≈ 10 s, benchmark ≈ 1 min.
 
 Livrables : [SOLUTION_S1](novamarket/s1/SOLUTION_S1.md) · [SOLUTION_S2](novamarket/s2/SOLUTION_S2.md) · [SOLUTION_S3](novamarket/s3/SOLUTION_S3.md)
+
+## S3 · Ingestion asynchrone (API fournisseur)
+
+Depuis `novamarket/`, avec Python 3.12. L'API tourne sans PostgreSQL :
+
+```bash
+python3.12 -m venv .venv && source .venv/bin/activate
+python -m pip install -r requirements-v3.txt
+docker compose up -d --build --wait fournisseur
+python ingestion/src/collecteur.py --scenario atelier
+python -m unittest discover -s ingestion/tests -v
+```
+
+Les commandes `docker compose` marchent aussi depuis la racine du dépôt : le [compose.yaml](compose.yaml) racine inclut `novamarket/compose.yaml`, avec le même nom de projet, donc les mêmes conteneurs et le même volume.
+
+Sans Python 3.12 en local, le service `collecteur` (même Dockerfile que l'API, cible `collecteur`) embarque les dépendances :
+
+```bash
+docker compose --profile ingestion build
+docker compose run --rm collecteur --scenario atelier
+docker compose run --rm --entrypoint python collecteur -m unittest discover -s ingestion/tests -v
+```
+
+Résultat attendu sur `atelier` : 24 offres examinées, 20 valides publiées dans `ingestion/data/valid/offres.jsonl` (entrée de S4), 4 rejets motivés. Détails : [CONTRAT](novamarket/ingestion/CONTRAT.md) · [SOLUTION_S3_INGESTION](novamarket/ingestion/SOLUTION_S3_INGESTION.md)

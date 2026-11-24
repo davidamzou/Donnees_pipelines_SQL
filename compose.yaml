@@ -1,0 +1,7 @@
+# Raccourci : permet de lancer `docker compose …` depuis la racine du dépôt.
+# La configuration réelle est novamarket/compose.yaml ; ses chemins relatifs
+# (./s1, ./ingestion…) restent résolus depuis novamarket/.
+# Même nom de projet que novamarket/ : mêmes conteneurs, même volume PostgreSQL.
+name: novamarket-s1
+include:
+  - novamarket/compose.yaml

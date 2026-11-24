@@ -5,9 +5,10 @@
     "ghcr.io/devcontainers/features/docker-in-docker:2": {}
   },
   "hostRequirements": { "cpus": 2, "memory": "8gb" },
-  "forwardPorts": [15432, 13000],
+  "forwardPorts": [15432, 18080, 13000],
   "portsAttributes": {
     "15432": { "label": "PostgreSQL" },
+    "18080": { "label": "API fournisseur (S3)" },
     "13000": { "label": "Metabase" }
   },
   "postStartCommand": "cd novamarket && docker compose pull postgres"

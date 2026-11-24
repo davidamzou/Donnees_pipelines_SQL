@@ -1,0 +1,5 @@
+# Contexte des images construites depuis novamarket/ (fournisseur, collecteur) :
+# on n'envoie au moteur Docker que les deux fichiers copiés par le Dockerfile.
+*
+!requirements-v3.txt
+!ingestion/api/server.py

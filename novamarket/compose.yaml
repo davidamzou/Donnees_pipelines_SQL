@@ -18,6 +18,39 @@ services:
       interval: 2s
       timeout: 3s
       retries: 30
+  fournisseur:
+    profiles: [ingestion]
+    build:
+      context: .
+      dockerfile: ingestion/api/Dockerfile
+      target: fournisseur
+    environment:
+      API_LATENCY_SECONDS: ${NOVAMARKET_API_LATENCY:-0.12}
+    ports:
+      - "127.0.0.1:${NOVAMARKET_API_PORT:-18080}:8080"
+    mem_limit: 128m
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://127.0.0.1:8080/health', timeout=2).close()"]
+      interval: 2s
+      timeout: 3s
+      retries: 15
+  collecteur:
+    profiles: [ingestion]
+    build:
+      context: .
+      dockerfile: ingestion/api/Dockerfile
+      target: collecteur
+    user: "${NOVAMARKET_UID:-1000}:${NOVAMARKET_GID:-1000}"
+    environment:
+      NOVAMARKET_API_URL: http://fournisseur:8080
+      HOME: /tmp
+    volumes:
+      - ./ingestion:/work/ingestion
+      - ./s2/donnees:/work/s2/donnees:ro
+    depends_on:
+      fournisseur:
+        condition: service_healthy
+    mem_limit: 256m
   dbt:
     profiles: [transfo]
     build: ./s4

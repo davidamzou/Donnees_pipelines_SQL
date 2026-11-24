@@ -1,0 +1,46 @@
+{
+  "run": "ref-clean-sequentiel",
+  "scenario": "clean",
+  "concurrence_max": 1,
+  "tentatives_max": 4,
+  "timeout_s": 1.0,
+  "debut": "2026-11-24T10:49:57.149+00:00",
+  "fin": "2026-11-24T10:49:57.921+00:00",
+  "duree_s": 0.772,
+  "statut": "succes",
+  "publie": true,
+  "pages_attendues": 6,
+  "pages_recues": 6,
+  "pages_en_echec": [],
+  "requetes_http": 6,
+  "reprises": 0,
+  "concurrence_observee": 1,
+  "tentatives_par_page": {
+    "1": 1,
+    "2": 1,
+    "3": 1,
+    "4": 1,
+    "5": 1,
+    "6": 1
+  },
+  "incidents": {},
+  "lignes_examinees": 24,
+  "lignes_valides": 24,
+  "lignes_rejetees": 0,
+  "motifs_rejet": {},
+  "fichiers": {
+    "raw": "ingestion/data/raw/ref-clean-sequentiel.jsonl",
+    "journal": "ingestion/data/logs/ref-clean-sequentiel.log",
+    "bilan": "ingestion/data/bilans/ref-clean-sequentiel.json",
+    "valid": "ingestion/data/valid/offres.jsonl",
+    "valid_run": "ingestion/data/valid/runs/ref-clean-sequentiel.jsonl",
+    "rejected": "ingestion/data/rejected/ref-clean-sequentiel.jsonl"
+  },
+  "erreur": null,
+  "controles": {
+    "toutes_pages_recues": true,
+    "lignes_equilibrees": true,
+    "concurrence_respectee": true,
+    "requetes_coherentes": true
+  }
+}
