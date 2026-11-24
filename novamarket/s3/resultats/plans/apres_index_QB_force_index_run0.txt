@@ -1,0 +1,27 @@
+                                                                                 QUERY PLAN                                                                                 
+----------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+ Finalize Aggregate  (cost=239116.66..239116.67 rows=1 width=16) (actual time=683.095..686.654 rows=1 loops=1)
+   Buffers: shared read=71694
+   ->  Gather  (cost=239116.44..239116.65 rows=2 width=16) (actual time=682.790..686.642 rows=3 loops=1)
+         Workers Planned: 2
+         Workers Launched: 2
+         Buffers: shared read=71694
+         ->  Partial Aggregate  (cost=238116.44..238116.45 rows=1 width=16) (actual time=673.216..673.217 rows=1 loops=3)
+               Buffers: shared read=71694
+               ->  Parallel Bitmap Heap Scan on benchmark_sales  (cost=105363.30..218399.54 rows=3943380 width=4) (actual time=124.910..433.885 rows=3166667 loops=3)
+                     Recheck Cond: (store_id = 1)
+                     Heap Blocks: exact=20941
+                     Buffers: shared read=71694
+                     ->  Bitmap Index Scan on benchmark_sales_store_id_idx  (cost=0.00..102997.27 rows=9464111 width=0) (actual time=127.524..127.524 rows=9500000 loops=1)
+                           Index Cond: (store_id = 1)
+                           Buffers: shared read=7999
+ Planning:
+   Buffers: shared hit=49 read=24
+ Planning Time: 0.423 ms
+ JIT:
+   Functions: 17
+   Options: Inlining false, Optimization false, Expressions true, Deforming true
+   Timing: Generation 0.684 ms (Deform 0.253 ms), Inlining 0.000 ms, Optimization 0.644 ms, Emission 8.696 ms, Total 10.024 ms
+ Execution Time: 697.546 ms
+(23 rows)
+

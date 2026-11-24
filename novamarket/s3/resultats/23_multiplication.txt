@@ -1,0 +1,61 @@
+== Jointure naïve : total des ventes « en campagne » (FAUX)
+                                                                                QUERY PLAN                                                                                
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+ Aggregate  (cost=16328.97..16328.98 rows=1 width=16) (actual time=1.193..1.194 rows=1 loops=1)
+   Buffers: shared hit=148 read=162
+   ->  Nested Loop  (cost=0.45..16250.06 rows=15782 width=4) (actual time=0.046..1.172 rows=400 loops=1)
+         Buffers: shared hit=148 read=162
+         ->  Seq Scan on campaign_assignments ca  (cost=0.00..1.04 rows=4 width=4) (actual time=0.004..0.005 rows=4 loops=1)
+               Buffers: shared hit=1
+         ->  Memoize  (cost=0.45..4889.80 rows=7519 width=8) (actual time=0.014..0.285 rows=100 loops=4)
+               Cache Key: ca.store_id
+               Cache Mode: logical
+               Hits: 1  Misses: 3  Evictions: 0  Overflows: 0  Memory Usage: 12kB
+               Buffers: shared hit=147 read=162
+               ->  Index Scan using benchmark_sales_store_id_idx on benchmark_sales s  (cost=0.43..4889.79 rows=7519 width=8) (actual time=0.017..0.364 rows=100 loops=3)
+                     Index Cond: (store_id = ca.store_id)
+                     Buffers: shared hit=147 read=162
+ Planning:
+   Buffers: shared hit=178 read=17
+ Planning Time: 0.526 ms
+ Execution Time: 1.261 ms
+(18 rows)
+
+== Résultats comparés
+                 methode                 | lignes | montant_cents 
+-----------------------------------------+--------+---------------
+ magasin 42 seul                         |    100 |       1010000
+ semi-jointure EXISTS (grain vente)      |    300 |       4236000
+ jointure naïve (grain vente x campagne) |    400 |       5246000
+(3 rows)
+
+== Par campagne : ici le grain (vente, campagne) est VOULU, mais les totaux ne s'additionnent pas
+ campaign_id | ventes | montant_cents | magasins 
+-------------+--------+---------------+----------
+         101 |    200 |       2486000 | {42,51}
+         102 |    100 |       1010000 | {42}
+         103 |    100 |       1750000 | {52}
+(3 rows)
+
+== Plan de la version correcte (semi-jointure)
+                                                                             QUERY PLAN                                                                             
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------
+ Aggregate  (cost=15662.06..15662.07 rows=1 width=16) (actual time=0.124..0.124 rows=1 loops=1)
+   Buffers: shared hit=310
+   ->  Nested Loop  (cost=1.49..15583.15 rows=15782 width=4) (actual time=0.007..0.111 rows=300 loops=1)
+         Buffers: shared hit=310
+         ->  HashAggregate  (cost=1.05..1.08 rows=3 width=4) (actual time=0.005..0.006 rows=3 loops=1)
+               Group Key: ca.store_id
+               Batches: 1  Memory Usage: 24kB
+               Buffers: shared hit=1
+               ->  Seq Scan on campaign_assignments ca  (cost=0.00..1.04 rows=4 width=4) (actual time=0.002..0.003 rows=4 loops=1)
+                     Buffers: shared hit=1
+         ->  Index Scan using benchmark_sales_store_id_idx on benchmark_sales s  (cost=0.43..5118.83 rows=7519 width=8) (actual time=0.001..0.028 rows=100 loops=3)
+               Index Cond: (store_id = ca.store_id)
+               Buffers: shared hit=309
+ Planning:
+   Buffers: shared hit=16
+ Planning Time: 0.111 ms
+ Execution Time: 0.134 ms
+(17 rows)
+

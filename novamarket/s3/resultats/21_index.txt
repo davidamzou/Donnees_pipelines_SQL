@@ -1,0 +1,7 @@
+Time: 0.266 ms
+Time: 1501.438 ms (00:01.501)
+                 index                  | taille_index | taille_table | ratio_pct 
+----------------------------------------+--------------+--------------+-----------
+ benchmark.benchmark_sales_store_id_idx | 66 MB        | 498 MB       |      13.3
+(1 row)
+

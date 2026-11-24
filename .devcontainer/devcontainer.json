@@ -1,0 +1,14 @@
+{
+  "name": "NovaMarket SQL",
+  "image": "mcr.microsoft.com/devcontainers/base:ubuntu-24.04",
+  "features": {
+    "ghcr.io/devcontainers/features/docker-in-docker:2": {}
+  },
+  "hostRequirements": { "cpus": 2, "memory": "8gb" },
+  "forwardPorts": [15432, 13000],
+  "portsAttributes": {
+    "15432": { "label": "PostgreSQL" },
+    "13000": { "label": "Metabase" }
+  },
+  "postStartCommand": "cd novamarket && docker compose pull postgres"
+}

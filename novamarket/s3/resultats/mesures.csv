@@ -1,0 +1,21 @@
+phase,requete,passage,execution_ms,planning_ms,shared_hit,shared_read,noeud_principal
+avant_index,QA_selectif,premier,113.042,0.384,0,63744,Parallel Seq Scan
+avant_index,QA_selectif,1,137.380,0.126,96,63648,Parallel Seq Scan
+avant_index,QA_selectif,2,146.503,0.150,192,63552,Parallel Seq Scan
+avant_index,QA_selectif,3,111.322,0.135,288,63456,Parallel Seq Scan
+avant_index,QB_large,premier,447.114,0.365,0,63744,Parallel Seq Scan
+avant_index,QB_large,1,441.028,0.130,96,63648,Parallel Seq Scan
+avant_index,QB_large,2,411.935,0.138,192,63552,Parallel Seq Scan
+avant_index,QB_large,3,447.951,0.118,288,63456,Parallel Seq Scan
+apres_index,QA_selectif,premier,1.202,0.472,0,103,Index Scan
+apres_index,QA_selectif,1,0.167,0.174,103,0,Index Scan
+apres_index,QA_selectif,2,0.142,0.160,103,0,Index Scan
+apres_index,QA_selectif,3,0.198,0.213,103,0,Index Scan
+apres_index,QB_large,premier,682.031,0.316,0,63744,Parallel Seq Scan
+apres_index,QB_large,1,553.173,0.172,96,63648,Parallel Seq Scan
+apres_index,QB_large,2,508.474,0.179,192,63552,Parallel Seq Scan
+apres_index,QB_large,3,479.802,0.183,288,63456,Parallel Seq Scan
+apres_index,QB_force_index,premier,697.546,0.423,0,71694,Parallel Bitmap Heap Scan
+apres_index,QB_force_index,1,678.331,0.329,0,71694,Parallel Bitmap Heap Scan
+apres_index,QB_force_index,2,822.883,0.339,0,71694,Parallel Bitmap Heap Scan
+apres_index,QB_force_index,3,787.569,0.502,0,71694,Parallel Bitmap Heap Scan

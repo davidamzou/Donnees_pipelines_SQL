@@ -1,0 +1,27 @@
+# macOS
+.DS_Store
+._*
+
+# Fichiers verrous / temporaires Word & Office
+~$*
+*.tmp
+
+# Variables d'environnement et secrets locaux
+.env
+.env.*
+!.env.example
+
+# dbt (séances S4–S5)
+target/
+dbt_packages/
+logs/
+.user.yml
+
+# Sauvegardes PostgreSQL locales
+*.dump
+*.backup
+*.sql.gz
+
+# Éditeurs
+.idea/
+*.swp

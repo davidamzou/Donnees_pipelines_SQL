@@ -1,0 +1,72 @@
+== M3.1 Couverture des périodes : jours observés par mois
+    mois    | premier_jour | dernier_jour | jours_avec_commande | jours_du_mois 
+------------+--------------+--------------+---------------------+---------------
+ 2026-09-01 | 2026-09-01   | 2026-09-30   |                  30 |            30
+ 2026-10-01 | 2026-10-01   | 2026-10-31   |                  31 |            31
+ 2026-11-01 | 2026-11-01   | 2026-11-19   |                  19 |            30
+(3 rows)
+
+== M3.2 CA mensuel, LAG / LEAD, sur un calendrier complet (mois manquants = 0)
+    mois    |         couverture         | commandes | ca_euros | ca_mois_precedent | ca_mois_suivant | evolution_pct 
+------------+----------------------------+-----------+----------+-------------------+-----------------+---------------
+ 2026-09-01 | complet                    |       120 |  9717.50 |                   |        10261.25 |              
+ 2026-10-01 | complet                    |       124 | 10261.25 |           9717.50 |         6231.25 |           5.6
+ 2026-11-01 | INCOMPLET (jusqu'au 19/11) |        76 |  6231.25 |          10261.25 |                 |         -39.3
+(3 rows)
+
+== M3.3 Comparaison à périmètre égal : jours 1 à 19 de chaque mois
+    mois    | commandes | ca_j1_j19_euros | precedent | evolution_pct 
+------------+-----------+-----------------+-----------+---------------
+ 2026-09-01 |        76 |         6228.75 |           |              
+ 2026-10-01 |        76 |         6191.25 |   6228.75 |          -0.6
+ 2026-11-01 |        76 |         6231.25 |   6191.25 |           0.6
+(3 rows)
+
+== M3.4 CA hebdomadaire (semaines ISO) avec LAG et repérage des semaines partielles
+  semaine   | jours_observes | couverture | ca_euros | semaine_precedente | ecart_euros 
+------------+----------------+------------+----------+--------------------+-------------
+ 2026-08-31 |              6 | partielle  |  1877.50 |                    |            
+ 2026-09-07 |              7 | pleine     |  2421.25 |            1877.50 |      543.75
+ 2026-09-14 |              7 | pleine     |  2146.25 |            2421.25 |     -275.00
+ 2026-09-21 |              7 | pleine     |  2438.75 |            2146.25 |      292.50
+ 2026-09-28 |              7 | pleine     |  2247.50 |            2438.75 |     -191.25
+ 2026-10-05 |              7 | pleine     |  2217.50 |            2247.50 |      -30.00
+ 2026-10-12 |              7 | pleine     |  2331.25 |            2217.50 |      113.75
+ 2026-10-19 |              7 | pleine     |  2218.75 |            2331.25 |     -112.50
+ 2026-10-26 |              7 | pleine     |  2408.75 |            2218.75 |      190.00
+ 2026-11-02 |              7 | pleine     |  2161.25 |            2408.75 |     -247.50
+ 2026-11-09 |              7 | pleine     |  2427.50 |            2161.25 |      266.25
+ 2026-11-16 |              4 | partielle  |  1313.75 |            2427.50 |    -1113.75
+(12 rows)
+
+== M3.5 Évolution mensuelle par catégorie feuille (LAG partitionné)
+ category_name |    mois    | ca_euros | precedent | evolution_pct 
+---------------+------------+----------+-----------+---------------
+ Cuisine       | 2026-09-01 |  1310.00 |           |              
+ Cuisine       | 2026-10-01 |  1311.25 |   1310.00 |           0.1
+ Cuisine       | 2026-11-01 |   856.25 |   1311.25 |         -34.7
+ Jardin        | 2026-09-01 |  1880.00 |           |              
+ Jardin        | 2026-10-01 |  1961.25 |   1880.00 |           4.3
+ Jardin        | 2026-11-01 |  1212.50 |   1961.25 |         -38.2
+ Jeux de table | 2026-09-01 |  2228.75 |           |              
+ Jeux de table | 2026-10-01 |  2491.25 |   2228.75 |          11.8
+ Jeux de table | 2026-11-01 |  1426.25 |   2491.25 |         -42.7
+ Outillage     | 2026-09-01 |  1200.00 |           |              
+ Outillage     | 2026-10-01 |  1187.50 |   1200.00 |          -1.0
+ Outillage     | 2026-11-01 |   712.50 |   1187.50 |         -40.0
+ Randonnée     | 2026-09-01 |  2452.50 |           |              
+ Randonnée     | 2026-10-01 |  2701.25 |   2452.50 |          10.1
+ Randonnée     | 2026-11-01 |  1612.50 |   2701.25 |         -40.3
+ Rangement     | 2026-09-01 |   646.25 |           |              
+ Rangement     | 2026-10-01 |   608.75 |    646.25 |          -5.8
+ Rangement     | 2026-11-01 |   411.25 |    608.75 |         -32.4
+(18 rows)
+
+== M3.6 Cohérence ventes / catalogue : ventes avant first_listed_on, par mois
+ product_id | first_listed_on |    mois    | lignes | lignes_avant_mise_en_vente | ca_completed_concerne_euros 
+------------+-----------------+------------+--------+----------------------------+-----------------------------
+          6 | 2026-09-15      | 2026-09-01 |     13 |                          6 |                       62.50
+          6 | 2026-09-15      | 2026-10-01 |     12 |                          0 |                            
+          6 | 2026-09-15      | 2026-11-01 |      8 |                          0 |                            
+(3 rows)
+

@@ -1,0 +1,94 @@
+== Sans statistiques étendues : zone 3 ET canal 3 (combinaison qui existe)
+                                                                     QUERY PLAN                                                                     
+----------------------------------------------------------------------------------------------------------------------------------------------------
+ Finalize Aggregate  (cost=127354.89..127354.90 rows=1 width=8) (actual time=182.428..186.696 rows=1 loops=1)
+   Buffers: shared hit=16171 read=47573
+   ->  Gather  (cost=127354.68..127354.89 rows=2 width=8) (actual time=182.205..186.680 rows=3 loops=1)
+         Workers Planned: 2
+         Workers Launched: 2
+         Buffers: shared hit=16171 read=47573
+         ->  Partial Aggregate  (cost=126354.68..126354.69 rows=1 width=8) (actual time=173.825..173.826 rows=1 loops=3)
+               Buffers: shared hit=16171 read=47573
+               ->  Parallel Seq Scan on benchmark_sales  (cost=0.00..126246.93 rows=43098 width=0) (actual time=2.339..162.744 rows=333333 loops=3)
+                     Filter: ((zone_id = 3) AND (channel_id = 3))
+                     Rows Removed by Filter: 3000000
+                     Buffers: shared hit=16171 read=47573
+ Planning:
+   Buffers: shared hit=44 read=29 dirtied=1
+ Planning Time: 0.411 ms
+ JIT:
+   Functions: 14
+   Options: Inlining false, Optimization false, Expressions true, Deforming true
+   Timing: Generation 0.637 ms (Deform 0.166 ms), Inlining 0.000 ms, Optimization 0.374 ms, Emission 6.807 ms, Total 7.818 ms
+ Execution Time: 196.188 ms
+(20 rows)
+
+== Sans statistiques étendues : zone 3 ET canal 4 (combinaison qui n'existe pas)
+                                                                   QUERY PLAN                                                                    
+-------------------------------------------------------------------------------------------------------------------------------------------------
+ Finalize Aggregate  (cost=127353.87..127353.88 rows=1 width=8) (actual time=237.812..240.975 rows=1 loops=1)
+   Buffers: shared hit=16171 read=47573
+   ->  Gather  (cost=127353.65..127353.86 rows=2 width=8) (actual time=208.029..240.911 rows=3 loops=1)
+         Workers Planned: 2
+         Workers Launched: 2
+         Buffers: shared hit=16171 read=47573
+         ->  Partial Aggregate  (cost=126353.65..126353.66 rows=1 width=8) (actual time=177.979..177.980 rows=1 loops=3)
+               Buffers: shared hit=16171 read=47573
+               ->  Parallel Seq Scan on benchmark_sales  (cost=0.00..126246.93 rows=42688 width=0) (actual time=177.937..177.937 rows=0 loops=3)
+                     Filter: ((zone_id = 3) AND (channel_id = 4))
+                     Rows Removed by Filter: 3333333
+                     Buffers: shared hit=16171 read=47573
+ Planning Time: 0.231 ms
+ JIT:
+   Functions: 14
+   Options: Inlining false, Optimization false, Expressions true, Deforming true
+   Timing: Generation 0.488 ms (Deform 0.140 ms), Inlining 0.000 ms, Optimization 0.624 ms, Emission 7.329 ms, Total 8.441 ms
+ Execution Time: 241.218 ms
+(18 rows)
+
+== Avec statistiques étendues (dependencies, mcv) : zone 3 ET canal 3
+                                                                     QUERY PLAN                                                                      
+-----------------------------------------------------------------------------------------------------------------------------------------------------
+ Finalize Aggregate  (cost=128275.12..128275.13 rows=1 width=8) (actual time=203.741..206.373 rows=1 loops=1)
+   Buffers: shared hit=16148 read=47596
+   ->  Gather  (cost=128274.91..128275.12 rows=2 width=8) (actual time=203.634..206.364 rows=3 loops=1)
+         Workers Planned: 2
+         Workers Launched: 2
+         Buffers: shared hit=16148 read=47596
+         ->  Partial Aggregate  (cost=127274.91..127274.92 rows=1 width=8) (actual time=195.593..195.593 rows=1 loops=3)
+               Buffers: shared hit=16148 read=47596
+               ->  Parallel Seq Scan on benchmark_sales  (cost=0.00..126243.32 rows=412635 width=0) (actual time=2.539..183.976 rows=333333 loops=3)
+                     Filter: ((zone_id = 3) AND (channel_id = 3))
+                     Rows Removed by Filter: 3000000
+                     Buffers: shared hit=16148 read=47596
+ Planning:
+   Buffers: shared hit=23 read=1
+ Planning Time: 0.100 ms
+ JIT:
+   Functions: 14
+   Options: Inlining false, Optimization false, Expressions true, Deforming true
+   Timing: Generation 0.773 ms (Deform 0.157 ms), Inlining 0.000 ms, Optimization 0.478 ms, Emission 7.115 ms, Total 8.366 ms
+ Execution Time: 206.586 ms
+(20 rows)
+
+== Avec statistiques étendues : zone 3 ET canal 4
+                                                              QUERY PLAN                                                               
+---------------------------------------------------------------------------------------------------------------------------------------
+ Aggregate  (cost=127243.42..127243.43 rows=1 width=8) (actual time=195.183..198.560 rows=1 loops=1)
+   Buffers: shared hit=16154 read=47590
+   ->  Gather  (cost=1000.00..127243.42 rows=1 width=0) (actual time=195.102..198.479 rows=0 loops=1)
+         Workers Planned: 2
+         Workers Launched: 2
+         Buffers: shared hit=16154 read=47590
+         ->  Parallel Seq Scan on benchmark_sales  (cost=0.00..126243.32 rows=1 width=0) (actual time=186.315..186.315 rows=0 loops=3)
+               Filter: ((zone_id = 3) AND (channel_id = 4))
+               Rows Removed by Filter: 3333333
+               Buffers: shared hit=16154 read=47590
+ Planning Time: 0.047 ms
+ JIT:
+   Functions: 11
+   Options: Inlining false, Optimization false, Expressions true, Deforming true
+   Timing: Generation 0.414 ms (Deform 0.142 ms), Inlining 0.000 ms, Optimization 0.435 ms, Emission 6.329 ms, Total 7.178 ms
+ Execution Time: 198.733 ms
+(16 rows)
+

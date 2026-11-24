@@ -1,0 +1,68 @@
+== M1.1 Multiplicités à la réception (grain attendu : 1 ligne = 1 id)
+     source     | lignes | ids_distincts | lignes_en_trop 
+----------------+--------+---------------+----------------
+ categories.csv |     10 |            10 |              0
+ products.csv   |     25 |            24 |              1
+(2 rows)
+
+== M1.2 Identifiants reçus plusieurs fois
+ product_id | occurrences | versions_distinctes | lignes_source 
+------------+-------------+---------------------+---------------
+ 3          |           2 |                   1 | 3, 25
+(1 row)
+
+== M1.3 Champs vides à la réception
+                   controle                    | lignes 
+-----------------------------------------------+--------
+ categories.parent_category_id vide (= racine) |      2
+ products : un champ vide                      |      0
+(2 rows)
+
+== M1.4 Journal des rejets du catalogue
+    source    | ligne | cle_source |            motif            |                                                         contenu                                                          
+--------------+-------+------------+-----------------------------+--------------------------------------------------------------------------------------------------------------------------
+ products.csv |    25 | 3          | doublon exact de product_id | {"sku": "NM-003", "product_id": "3", "category_id": "11", "product_name": "Article 03", "first_listed_on": "2026-08-15"}
+(1 row)
+
+== M1.5 Couverture ventes <-> catalogue
+ produits_vendus | produits_catalogue | vendus_hors_catalogue | catalogue_jamais_vendu | lignes_articles_orphelines 
+-----------------+--------------------+-----------------------+------------------------+----------------------------
+              24 |                 24 |                     0 |                      0 |                          0
+(1 row)
+
+== M1.6 Lignes d'articles rejetées en S1 : leurs produits sont-ils au catalogue ?
+ ligne |                  motif                  | product_id | produit_au_catalogue 
+-------+-----------------------------------------+------------+----------------------
+   801 | doublon exact de order_item_id          | 5          | t
+   802 | commande inconnue (référence orpheline) | 1          | t
+(2 rows)
+
+== M1.7 Catégories : feuilles sans produit, produits par catégorie
+ category_id | category_name | parent_category_id | produits | a_des_enfants 
+-------------+---------------+--------------------+----------+---------------
+           1 | Maison        |                    |        0 | t
+           2 | Loisirs       |                    |        0 | t
+           3 | Atelier       |                  1 |        0 | t
+           4 | Extérieur     |                  2 |        0 | t
+          11 | Rangement     |                  3 |        4 | f
+          12 | Outillage     |                  3 |        4 | f
+          21 | Cuisine       |                  1 |        4 | f
+          22 | Jardin        |                  4 |        4 | f
+          31 | Randonnée     |                  4 |        4 | f
+          32 | Jeux de table |                  2 |        4 | f
+(10 rows)
+
+== M1.8 Cohérence des dates : ventes antérieures à la 1re mise en vente déclarée
+ product_id |  sku   | first_listed_on | premiere_vente | lignes_avant_mise_en_vente | dont_completed 
+------------+--------+-----------------+----------------+----------------------------+----------------
+          6 | NM-006 | 2026-09-15      | 2026-09-01     |                          6 |              5
+(1 row)
+
+== M1.9 Risque de multiplication : jointure des ventes sur le catalogue BRUT (réception)
+          catalogue_joint          | lignes_apres_jointure | montant_euros 
+-----------------------------------+-----------------------+---------------
+ nova.products (dédoublonné)       |                   800 |      32717.50
+ reception.products (brut)         |                   833 |      33006.25
+ référence : nova.order_items seul |                   800 |      32717.50
+(3 rows)
+

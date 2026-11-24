@@ -1,0 +1,47 @@
+== M5.1 Arbre des catégories (chemin, profondeur, cycle)
+ category_id | profondeur |             chemin              | est_cycle | produits_directs 
+-------------+------------+---------------------------------+-----------+------------------
+           2 |          0 | Loisirs                         | f         |                0
+           4 |          1 | Loisirs > Extérieur             | f         |                0
+          22 |          2 | Loisirs > Extérieur > Jardin    | f         |                4
+          31 |          2 | Loisirs > Extérieur > Randonnée | f         |                4
+          32 |          1 | Loisirs > Jeux de table         | f         |                4
+           1 |          0 | Maison                          | f         |                0
+           3 |          1 | Maison > Atelier                | f         |                0
+          12 |          2 | Maison > Atelier > Outillage    | f         |                4
+          11 |          2 | Maison > Atelier > Rangement    | f         |                4
+          21 |          1 | Maison > Cuisine                | f         |                4
+(10 rows)
+
+== M5.2 Contrôles de rattachement
+                    controle                    | valeur 
+------------------------------------------------+--------
+ catégories du référentiel                      |     10
+ catégories atteintes depuis une racine         |     10
+ catégories non atteintes (orpheline / cycle)   |      0
+ catégories atteintes plusieurs fois            |      0
+ profondeur maximale                            |      2
+ produits rattachés à une catégorie non feuille |      0
+(6 rows)
+
+== M5.3 CA consolidé par branche (chaque catégorie + tous ses descendants)
+ category_id | category_name | parent_category_id | sous_categories | produits_vendus | ca_branche_euros | part_ca_total_pct 
+-------------+---------------+--------------------+-----------------+-----------------+------------------+-------------------
+           2 | Loisirs       |                    |               4 |              12 |         17966.25 |              68.5
+           1 | Maison        |                    |               4 |              12 |          8243.75 |              31.5
+           3 | Atelier       |                  1 |               2 |               8 |          4766.25 |              18.2
+          21 | Cuisine       |                  1 |               0 |               4 |          3477.50 |              13.3
+           4 | Extérieur     |                  2 |               2 |               8 |         11820.00 |              45.1
+          32 | Jeux de table |                  2 |               0 |               4 |          6146.25 |              23.5
+          12 | Outillage     |                  3 |               0 |               4 |          3100.00 |              11.8
+          11 | Rangement     |                  3 |               0 |               4 |          1666.25 |               6.4
+          31 | Randonnée     |                  4 |               0 |               4 |          6766.25 |              25.8
+          22 | Jardin        |                  4 |               0 |               4 |          5053.75 |              19.3
+(10 rows)
+
+== M5.4 Contrôle anti double comptage
+ somme_racines_euros | somme_toutes_branches_euros | ca_s1_euros |     controle      
+---------------------+-----------------------------+-------------+-------------------
+            26210.00 |                    69006.25 |    26210.00 | OK : racines = CA
+(1 row)
+
