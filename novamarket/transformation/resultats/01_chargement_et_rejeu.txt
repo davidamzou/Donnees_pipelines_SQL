@@ -1,0 +1,17 @@
+### Premier chargement
+Lot 1 · TERMINE · ingestion/data/valid/offres.jsonl
+  SHA-256   : 8dfc690a85ff4238501ff3fc158a850db318675a66edd4279dae47bb34b2eb7c · run S3 atelier-20261124-124308
+  Lues      : 20 = 20 acceptées + 0 rejetées
+  Acceptées : 20 insérées, 0 mises à jour, 0 réutilisées (déjà présentes à l'identique)
+  Rejets    : aucun
+  En base   : 20 observations dans fournisseur.offres
+offres en base : 20 (dont observées le 23/11 : 0)
+
+### Rejeu du même fichier
+Lot 2 · TERMINE · ingestion/data/valid/offres.jsonl
+  SHA-256   : 8dfc690a85ff4238501ff3fc158a850db318675a66edd4279dae47bb34b2eb7c · run S3 atelier-20261124-124308
+  Lues      : 20 = 20 acceptées + 0 rejetées
+  Acceptées : 0 insérées, 0 mises à jour, 20 réutilisées (déjà présentes à l'identique)
+  Rejets    : aucun
+  En base   : 20 observations dans fournisseur.offres
+offres en base : 20 (dont observées le 23/11 : 0)

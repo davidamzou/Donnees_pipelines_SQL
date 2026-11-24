@@ -51,6 +51,25 @@ services:
       fournisseur:
         condition: service_healthy
     mem_limit: 256m
+  chargeur:
+    profiles: [transfo]
+    build:
+      context: .
+      dockerfile: ingestion/api/Dockerfile
+      target: collecteur
+    user: "${NOVAMARKET_UID:-1000}:${NOVAMARKET_GID:-1000}"
+    entrypoint: ["python", "transformation/chargement_postgres.py"]
+    environment:
+      NOVAMARKET_DSN: ${NOVAMARKET_DSN_CONTENEUR:-host=postgres port=5432 dbname=novamarket user=atelier}
+      PGPASSWORD:
+      HOME: /tmp
+    volumes:
+      - ./transformation:/work/transformation
+      - ./ingestion/data:/work/ingestion/data:ro
+    depends_on:
+      postgres:
+        condition: service_healthy
+    mem_limit: 256m
   dbt:
     profiles: [transfo]
     build: ./s4
@@ -61,6 +80,7 @@ services:
     volumes:
       - ./s4/travail:/work
       - ./s4/exemple:/exemple:ro
+      - ./transformation/dbt:/projet
     mem_limit: 1g
     cpus: 2
   metabase:

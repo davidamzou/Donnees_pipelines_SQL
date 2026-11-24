@@ -1,0 +1,15 @@
+### Avant
+offres en base : 20 (dont observées le 23/11 : 0)
+
+### Lot jour_precedent.jsonl, panne simulée après la 1re écriture
+Lot 4 · ANNULE · transformation/exemple_lots/jour_precedent.jsonl
+  SHA-256   : b622dbe5884709a52fdfb81edb19e1ba054094974ddaaabcebad75a675bf208e
+  Lues      : 1 = 1 acceptées + 0 rejetées
+  Acceptées : 1 insérées, 0 mises à jour, 0 réutilisées (déjà présentes à l'identique) · ANNULÉES par ROLLBACK, rien n'est écrit
+  Rejets    : aucun
+  En base   : 20 observations dans fournisseur.offres
+  Erreur    : PanneSimulee: panne simulée après 1 écriture(s)
+(code de sortie 1 attendu : lot annulé)
+
+### Après
+offres en base : 20 (dont observées le 23/11 : 0)

@@ -1,0 +1,33 @@
+{"ts": "2026-11-24T12:43:08.583+00:00", "niveau": "INFO", "evenement": "collecte_demarree", "run": "atelier-20261124-124308", "scenario": "atelier", "mode": "concurrent", "concurrence": 3, "tentatives": 4, "timeout_s": 1.0, "base_url": "http://fournisseur:8080", "produits_catalogue": 24}
+{"ts": "2026-11-24T12:43:08.583+00:00", "niveau": "DEBUG", "evenement": "requete_envoyee", "page": 1, "tentative": 1, "en_vol": 1}
+{"ts": "2026-11-24T12:43:08.718+00:00", "niveau": "DEBUG", "evenement": "reponse_recue", "page": 1, "tentative": 1, "statut_http": 200, "duree_ms": 134}
+{"ts": "2026-11-24T12:43:08.718+00:00", "niveau": "INFO", "evenement": "page_recuperee", "page": 1, "tentative": 1, "lignes": 4}
+{"ts": "2026-11-24T12:43:08.719+00:00", "niveau": "DEBUG", "evenement": "requete_envoyee", "page": 2, "tentative": 1, "en_vol": 1}
+{"ts": "2026-11-24T12:43:08.719+00:00", "niveau": "DEBUG", "evenement": "requete_envoyee", "page": 3, "tentative": 1, "en_vol": 2}
+{"ts": "2026-11-24T12:43:08.720+00:00", "niveau": "DEBUG", "evenement": "requete_envoyee", "page": 4, "tentative": 1, "en_vol": 3}
+{"ts": "2026-11-24T12:43:08.848+00:00", "niveau": "DEBUG", "evenement": "reponse_recue", "page": 3, "tentative": 1, "statut_http": 200, "duree_ms": 128}
+{"ts": "2026-11-24T12:43:08.848+00:00", "niveau": "WARNING", "evenement": "reprise_programmee", "page": 3, "tentative": 1, "motif": "json_invalide", "attente_s": 0.256, "source_attente": "backoff"}
+{"ts": "2026-11-24T12:43:08.850+00:00", "niveau": "DEBUG", "evenement": "reponse_recue", "page": 2, "tentative": 1, "statut_http": 429, "duree_ms": 130}
+{"ts": "2026-11-24T12:43:08.851+00:00", "niveau": "WARNING", "evenement": "reprise_programmee", "page": 2, "tentative": 1, "motif": "http_429", "attente_s": 1.0, "source_attente": "retry-after"}
+{"ts": "2026-11-24T12:43:08.852+00:00", "niveau": "DEBUG", "evenement": "requete_envoyee", "page": 5, "tentative": 1, "en_vol": 2}
+{"ts": "2026-11-24T12:43:08.853+00:00", "niveau": "DEBUG", "evenement": "requete_envoyee", "page": 6, "tentative": 1, "en_vol": 3}
+{"ts": "2026-11-24T12:43:08.978+00:00", "niveau": "DEBUG", "evenement": "reponse_recue", "page": 6, "tentative": 1, "statut_http": 200, "duree_ms": 125}
+{"ts": "2026-11-24T12:43:08.979+00:00", "niveau": "INFO", "evenement": "page_recuperee", "page": 6, "tentative": 1, "lignes": 4}
+{"ts": "2026-11-24T12:43:08.980+00:00", "niveau": "DEBUG", "evenement": "reponse_recue", "page": 5, "tentative": 1, "statut_http": 200, "duree_ms": 128}
+{"ts": "2026-11-24T12:43:08.981+00:00", "niveau": "INFO", "evenement": "page_recuperee", "page": 5, "tentative": 1, "lignes": 4}
+{"ts": "2026-11-24T12:43:09.109+00:00", "niveau": "DEBUG", "evenement": "requete_envoyee", "page": 3, "tentative": 2, "en_vol": 2}
+{"ts": "2026-11-24T12:43:09.240+00:00", "niveau": "DEBUG", "evenement": "reponse_recue", "page": 3, "tentative": 2, "statut_http": 200, "duree_ms": 129}
+{"ts": "2026-11-24T12:43:09.241+00:00", "niveau": "INFO", "evenement": "page_recuperee", "page": 3, "tentative": 2, "lignes": 4}
+{"ts": "2026-11-24T12:43:09.727+00:00", "niveau": "WARNING", "evenement": "reprise_programmee", "page": 4, "tentative": 1, "motif": "timeout", "attente_s": 0.279, "source_attente": "backoff"}
+{"ts": "2026-11-24T12:43:09.857+00:00", "niveau": "DEBUG", "evenement": "requete_envoyee", "page": 2, "tentative": 2, "en_vol": 1}
+{"ts": "2026-11-24T12:43:10.009+00:00", "niveau": "DEBUG", "evenement": "requete_envoyee", "page": 4, "tentative": 2, "en_vol": 2}
+{"ts": "2026-11-24T12:43:10.010+00:00", "niveau": "DEBUG", "evenement": "reponse_recue", "page": 2, "tentative": 2, "statut_http": 200, "duree_ms": 153}
+{"ts": "2026-11-24T12:43:10.010+00:00", "niveau": "INFO", "evenement": "page_recuperee", "page": 2, "tentative": 2, "lignes": 4}
+{"ts": "2026-11-24T12:43:10.136+00:00", "niveau": "DEBUG", "evenement": "reponse_recue", "page": 4, "tentative": 2, "statut_http": 200, "duree_ms": 127}
+{"ts": "2026-11-24T12:43:10.136+00:00", "niveau": "INFO", "evenement": "page_recuperee", "page": 4, "tentative": 2, "lignes": 4}
+{"ts": "2026-11-24T12:43:10.137+00:00", "niveau": "WARNING", "evenement": "offre_rejetee", "page": 2, "position": 1, "motifs": ["champ_manquant:supplier_id"], "offer_id": "O005"}
+{"ts": "2026-11-24T12:43:10.138+00:00", "niveau": "WARNING", "evenement": "offre_rejetee", "page": 3, "position": 2, "motifs": ["type_invalide:price_cents"], "offer_id": "O010"}
+{"ts": "2026-11-24T12:43:10.139+00:00", "niveau": "WARNING", "evenement": "offre_rejetee", "page": 5, "position": 1, "motifs": ["produit_hors_catalogue"], "offer_id": "O017"}
+{"ts": "2026-11-24T12:43:10.139+00:00", "niveau": "WARNING", "evenement": "offre_rejetee", "page": 6, "position": 4, "motifs": ["doublon:offer_id"], "offer_id": "O001"}
+{"ts": "2026-11-24T12:43:10.147+00:00", "niveau": "INFO", "evenement": "lot_publie", "fichier": "ingestion/data/valid/offres.jsonl", "lignes": 20, "sha256": "8dfc690a85ff4238501ff3fc158a850db318675a66edd4279dae47bb34b2eb7c"}
+{"ts": "2026-11-24T12:43:10.152+00:00", "niveau": "DEBUG", "evenement": "bilan", "run": "atelier-20261124-124308", "scenario": "atelier", "concurrence_max": 3, "tentatives_max": 4, "timeout_s": 1.0, "debut": "2026-11-24T12:43:08.583+00:00", "fin": "2026-11-24T12:43:10.145+00:00", "duree_s": 1.563, "statut": "succes", "publie": true, "pages_attendues": 6, "pages_recues": 6, "pages_en_echec": [], "requetes_http": 9, "reprises": 3, "concurrence_observee": 3, "tentatives_par_page": {"1": 1, "2": 2, "3": 2, "4": 2, "5": 1, "6": 1}, "incidents": {"http_429": 1, "json_invalide": 1, "timeout": 1}, "lignes_examinees": 24, "lignes_valides": 20, "lignes_rejetees": 4, "motifs_rejet": {"champ_manquant:supplier_id": 1, "doublon:offer_id": 1, "produit_hors_catalogue": 1, "type_invalide:price_cents": 1}, "fichiers": {"raw": "ingestion/data/raw/atelier-20261124-124308.jsonl", "journal": "ingestion/data/logs/atelier-20261124-124308.log", "bilan": "ingestion/data/bilans/atelier-20261124-124308.json", "valid": "ingestion/data/valid/offres.jsonl", "valid_run": "ingestion/data/valid/runs/atelier-20261124-124308.jsonl", "rejected": "ingestion/data/rejected/atelier-20261124-124308.jsonl"}, "erreur": null, "controles": {"toutes_pages_recues": true, "lignes_equilibrees": true, "concurrence_respectee": true, "requetes_coherentes": true}}

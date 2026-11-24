@@ -1,0 +1,10 @@
+version: 2
+
+models:
+  - name: int_offres__enrichies
+    description: Observations d'offres avec libellés produit, catégorie et fournisseur ; grain (offer_id, observed_on).
+  - name: int_ventes__par_produit
+    description: Ventes completed agrégées par produit ; grain product_id.
+    columns:
+      - name: product_id
+        data_tests: [unique, not_null]

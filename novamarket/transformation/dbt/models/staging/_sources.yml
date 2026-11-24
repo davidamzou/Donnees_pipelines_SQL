@@ -1,0 +1,23 @@
+version: 2
+
+# Relations PostgreSQL existantes, lues par source() ; dbt ne les crée pas.
+sources:
+  - name: fournisseur
+    description: Offres fournisseurs chargées par transformation/chargement_postgres.py (S4 M1).
+    schema: fournisseur
+    tables:
+      - name: offres
+        description: Une offre observée un jour donné. Clé (offer_id, observed_on).
+      - name: fournisseurs
+        description: Référentiel des fournisseurs autorisés.
+      - name: lots
+        description: Une ligne par exécution du chargeur, avec ses compteurs.
+
+  - name: nova
+    description: Modèle transactionnel NovaMarket (S1) et catalogue (S2).
+    schema: nova
+    tables:
+      - name: products
+      - name: categories
+      - name: orders
+      - name: order_items

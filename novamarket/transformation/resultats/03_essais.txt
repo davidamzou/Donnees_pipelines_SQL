@@ -1,0 +1,25 @@
+### --essai exemple_lots/jour_precedent.jsonl
+Lot 5 · ESSAI_ANNULE · transformation/exemple_lots/jour_precedent.jsonl
+  SHA-256   : b622dbe5884709a52fdfb81edb19e1ba054094974ddaaabcebad75a675bf208e
+  Lues      : 3 = 3 acceptées + 0 rejetées
+  Acceptées : 2 insérées, 0 mises à jour, 1 réutilisées (déjà présentes à l'identique) · ANNULÉES par ROLLBACK, rien n'est écrit
+  Rejets    : aucun
+  En base   : 20 observations dans fournisseur.offres
+
+### --essai exemple_lots/correction_prix.jsonl
+Lot 6 · ESSAI_ANNULE · transformation/exemple_lots/correction_prix.jsonl
+  SHA-256   : 9ef591539d8d164b6ed22ce9756083e119464823fb50d48b36d01e3eeaf5b972
+  Lues      : 1 = 1 acceptées + 0 rejetées
+  Acceptées : 0 insérées, 1 mises à jour, 0 réutilisées (déjà présentes à l'identique) · ANNULÉES par ROLLBACK, rien n'est écrit
+  Rejets    : aucun
+  En base   : 20 observations dans fournisseur.offres
+
+### --essai exemple_lots/defectueux.jsonl
+Lot 7 · ESSAI_ANNULE · transformation/exemple_lots/defectueux.jsonl
+  SHA-256   : c7665d60a7a2d03e85b7398e5ea2a6ec5572fffde4c354bd98441b3a0b6e42dd
+  Lues      : 8 = 1 acceptées + 7 rejetées
+  Acceptées : 0 insérées, 0 mises à jour, 1 réutilisées (déjà présentes à l'identique) · ANNULÉES par ROLLBACK, rien n'est écrit
+  Rejets    : {'date_future:observed_on': 1, 'date_inexistante:observed_on': 1, 'devise_invalide': 1, 'doublon_dans_lot': 1, 'fournisseur_inconnu': 1, 'json_invalide': 1, 'produit_hors_catalogue': 1, 'type_invalide:price_cents': 1, 'valeur_negative:available_units': 1}
+  En base   : 20 observations dans fournisseur.offres
+
+offres en base : 20 (dont observées le 23/11 : 0)

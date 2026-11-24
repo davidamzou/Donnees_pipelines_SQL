@@ -1,0 +1,27 @@
+name: novamarket_dbt
+version: "1.0.0"
+config-version: 2
+profile: novamarket_dbt
+model-paths: ["models"]
+test-paths: ["tests"]
+snapshot-paths: ["snapshots"]
+clean-targets: ["target"]
+
+# Matérialisations par couche (comparaison vue / éphémère / table, cf. SOLUTION_S4.md).
+# Schémas PostgreSQL produits avec le profil dev : dbt_dev_staging,
+# dbt_dev_intermediate, dbt_dev_marts.
+models:
+  novamarket_dbt:
+    staging:
+      +schema: staging
+      +materialized: view
+    intermediate:
+      +schema: intermediate
+      +materialized: view
+    marts:
+      +schema: marts
+      +materialized: table
+
+data_tests:
+  novamarket_dbt:
+    +severity: error

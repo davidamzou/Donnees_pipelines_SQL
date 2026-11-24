@@ -1,0 +1,70 @@
+version: 2
+
+models:
+  - name: stg_fournisseur__offres
+    description: Observations d'offres fournisseurs, une ligne par (offer_id, observed_on).
+    columns:
+      - name: offer_id
+        data_tests: [not_null]
+      - name: observed_on
+        data_tests: [not_null]
+      - name: supplier_id
+        data_tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('stg_fournisseur__fournisseurs')
+                field: supplier_id
+      - name: product_id
+        data_tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('stg_nova__products')
+                field: product_id
+      - name: currency
+        data_tests:
+          - accepted_values:
+              arguments:
+                values: ['EUR']
+      - name: price_cents
+        data_tests: [not_null]
+      - name: available_units
+        data_tests: [not_null]
+
+  - name: stg_fournisseur__fournisseurs
+    columns:
+      - name: supplier_id
+        data_tests: [unique, not_null]
+
+  - name: stg_nova__products
+    columns:
+      - name: product_id
+        data_tests: [unique, not_null]
+      - name: category_id
+        data_tests:
+          - relationships:
+              arguments:
+                to: ref('stg_nova__categories')
+                field: category_id
+
+  - name: stg_nova__categories
+    columns:
+      - name: category_id
+        data_tests: [unique, not_null]
+
+  - name: stg_nova__order_lines
+    columns:
+      - name: order_item_id
+        data_tests: [unique, not_null]
+      - name: order_status
+        data_tests:
+          - accepted_values:
+              arguments:
+                values: ['completed', 'pending', 'cancelled']
+      - name: product_id
+        data_tests:
+          - relationships:
+              arguments:
+                to: ref('stg_nova__products')
+                field: product_id

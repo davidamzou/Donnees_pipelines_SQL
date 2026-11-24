@@ -1,0 +1,33 @@
+{"ts": "2026-11-24T10:49:58.103+00:00", "niveau": "INFO", "evenement": "collecte_demarree", "run": "ref-atelier-c3", "scenario": "atelier", "mode": "concurrent", "concurrence": 3, "tentatives": 4, "timeout_s": 1.0, "base_url": "http://fournisseur:8080", "produits_catalogue": 24}
+{"ts": "2026-11-24T10:49:58.103+00:00", "niveau": "DEBUG", "evenement": "requete_envoyee", "page": 1, "tentative": 1, "en_vol": 1}
+{"ts": "2026-11-24T10:49:58.231+00:00", "niveau": "DEBUG", "evenement": "reponse_recue", "page": 1, "tentative": 1, "statut_http": 200, "duree_ms": 127}
+{"ts": "2026-11-24T10:49:58.231+00:00", "niveau": "INFO", "evenement": "page_recuperee", "page": 1, "tentative": 1, "lignes": 4}
+{"ts": "2026-11-24T10:49:58.231+00:00", "niveau": "DEBUG", "evenement": "requete_envoyee", "page": 2, "tentative": 1, "en_vol": 1}
+{"ts": "2026-11-24T10:49:58.232+00:00", "niveau": "DEBUG", "evenement": "requete_envoyee", "page": 3, "tentative": 1, "en_vol": 2}
+{"ts": "2026-11-24T10:49:58.232+00:00", "niveau": "DEBUG", "evenement": "requete_envoyee", "page": 4, "tentative": 1, "en_vol": 3}
+{"ts": "2026-11-24T10:49:58.360+00:00", "niveau": "DEBUG", "evenement": "reponse_recue", "page": 2, "tentative": 1, "statut_http": 429, "duree_ms": 128}
+{"ts": "2026-11-24T10:49:58.361+00:00", "niveau": "WARNING", "evenement": "reprise_programmee", "page": 2, "tentative": 1, "motif": "http_429", "attente_s": 1.0, "source_attente": "retry-after"}
+{"ts": "2026-11-24T10:49:58.362+00:00", "niveau": "DEBUG", "evenement": "reponse_recue", "page": 3, "tentative": 1, "statut_http": 200, "duree_ms": 130}
+{"ts": "2026-11-24T10:49:58.363+00:00", "niveau": "WARNING", "evenement": "reprise_programmee", "page": 3, "tentative": 1, "motif": "json_invalide", "attente_s": 0.267, "source_attente": "backoff"}
+{"ts": "2026-11-24T10:49:58.363+00:00", "niveau": "DEBUG", "evenement": "requete_envoyee", "page": 5, "tentative": 1, "en_vol": 2}
+{"ts": "2026-11-24T10:49:58.364+00:00", "niveau": "DEBUG", "evenement": "requete_envoyee", "page": 6, "tentative": 1, "en_vol": 3}
+{"ts": "2026-11-24T10:49:58.494+00:00", "niveau": "DEBUG", "evenement": "reponse_recue", "page": 6, "tentative": 1, "statut_http": 200, "duree_ms": 129}
+{"ts": "2026-11-24T10:49:58.495+00:00", "niveau": "INFO", "evenement": "page_recuperee", "page": 6, "tentative": 1, "lignes": 4}
+{"ts": "2026-11-24T10:49:58.508+00:00", "niveau": "DEBUG", "evenement": "reponse_recue", "page": 5, "tentative": 1, "statut_http": 200, "duree_ms": 144}
+{"ts": "2026-11-24T10:49:58.508+00:00", "niveau": "INFO", "evenement": "page_recuperee", "page": 5, "tentative": 1, "lignes": 4}
+{"ts": "2026-11-24T10:49:58.632+00:00", "niveau": "DEBUG", "evenement": "requete_envoyee", "page": 3, "tentative": 2, "en_vol": 2}
+{"ts": "2026-11-24T10:49:58.761+00:00", "niveau": "DEBUG", "evenement": "reponse_recue", "page": 3, "tentative": 2, "statut_http": 200, "duree_ms": 128}
+{"ts": "2026-11-24T10:49:58.762+00:00", "niveau": "INFO", "evenement": "page_recuperee", "page": 3, "tentative": 2, "lignes": 4}
+{"ts": "2026-11-24T10:49:59.239+00:00", "niveau": "WARNING", "evenement": "reprise_programmee", "page": 4, "tentative": 1, "motif": "timeout", "attente_s": 0.251, "source_attente": "backoff"}
+{"ts": "2026-11-24T10:49:59.367+00:00", "niveau": "DEBUG", "evenement": "requete_envoyee", "page": 2, "tentative": 2, "en_vol": 1}
+{"ts": "2026-11-24T10:49:59.491+00:00", "niveau": "DEBUG", "evenement": "requete_envoyee", "page": 4, "tentative": 2, "en_vol": 2}
+{"ts": "2026-11-24T10:49:59.493+00:00", "niveau": "DEBUG", "evenement": "reponse_recue", "page": 2, "tentative": 2, "statut_http": 200, "duree_ms": 126}
+{"ts": "2026-11-24T10:49:59.494+00:00", "niveau": "INFO", "evenement": "page_recuperee", "page": 2, "tentative": 2, "lignes": 4}
+{"ts": "2026-11-24T10:49:59.619+00:00", "niveau": "DEBUG", "evenement": "reponse_recue", "page": 4, "tentative": 2, "statut_http": 200, "duree_ms": 127}
+{"ts": "2026-11-24T10:49:59.619+00:00", "niveau": "INFO", "evenement": "page_recuperee", "page": 4, "tentative": 2, "lignes": 4}
+{"ts": "2026-11-24T10:49:59.620+00:00", "niveau": "WARNING", "evenement": "offre_rejetee", "page": 2, "position": 1, "motifs": ["champ_manquant:supplier_id"], "offer_id": "O005"}
+{"ts": "2026-11-24T10:49:59.621+00:00", "niveau": "WARNING", "evenement": "offre_rejetee", "page": 3, "position": 2, "motifs": ["type_invalide:price_cents"], "offer_id": "O010"}
+{"ts": "2026-11-24T10:49:59.622+00:00", "niveau": "WARNING", "evenement": "offre_rejetee", "page": 5, "position": 1, "motifs": ["produit_hors_catalogue"], "offer_id": "O017"}
+{"ts": "2026-11-24T10:49:59.622+00:00", "niveau": "WARNING", "evenement": "offre_rejetee", "page": 6, "position": 4, "motifs": ["doublon:offer_id"], "offer_id": "O001"}
+{"ts": "2026-11-24T10:49:59.634+00:00", "niveau": "INFO", "evenement": "lot_publie", "fichier": "ingestion/data/valid/offres.jsonl", "lignes": 20, "sha256": "8dfc690a85ff4238501ff3fc158a850db318675a66edd4279dae47bb34b2eb7c"}
+{"ts": "2026-11-24T10:49:59.637+00:00", "niveau": "DEBUG", "evenement": "bilan", "run": "ref-atelier-c3", "scenario": "atelier", "concurrence_max": 3, "tentatives_max": 4, "timeout_s": 1.0, "debut": "2026-11-24T10:49:58.103+00:00", "fin": "2026-11-24T10:49:59.631+00:00", "duree_s": 1.529, "statut": "succes", "publie": true, "pages_attendues": 6, "pages_recues": 6, "pages_en_echec": [], "requetes_http": 9, "reprises": 3, "concurrence_observee": 3, "tentatives_par_page": {"1": 1, "2": 2, "3": 2, "4": 2, "5": 1, "6": 1}, "incidents": {"http_429": 1, "json_invalide": 1, "timeout": 1}, "lignes_examinees": 24, "lignes_valides": 20, "lignes_rejetees": 4, "motifs_rejet": {"champ_manquant:supplier_id": 1, "doublon:offer_id": 1, "produit_hors_catalogue": 1, "type_invalide:price_cents": 1}, "fichiers": {"raw": "ingestion/data/raw/ref-atelier-c3.jsonl", "journal": "ingestion/data/logs/ref-atelier-c3.log", "bilan": "ingestion/data/bilans/ref-atelier-c3.json", "valid": "ingestion/data/valid/offres.jsonl", "valid_run": "ingestion/data/valid/runs/ref-atelier-c3.jsonl", "rejected": "ingestion/data/rejected/ref-atelier-c3.jsonl"}, "erreur": null, "controles": {"toutes_pages_recues": true, "lignes_equilibrees": true, "concurrence_respectee": true, "requetes_coherentes": true}}

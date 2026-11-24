@@ -1,0 +1,139 @@
+### dbt compile
+ Container novamarket-s1-dbt-run-ae06fa8d6a35 Creating 
+ Container novamarket-s1-dbt-run-ae06fa8d6a35 Created 
+15:26:00  Running with dbt=1.11.17
+15:26:00  Registered adapter: postgres=1.10.2
+15:26:00  Found 9 models, 33 data tests, 7 sources, 477 macros
+15:26:00  
+15:26:00  Concurrency: 2 threads (target='dev')
+15:26:00  
+
+### dbt run
+ Container novamarket-s1-dbt-run-64c712cf88f9 Creating 
+ Container novamarket-s1-dbt-run-64c712cf88f9 Created 
+15:26:01  Running with dbt=1.11.17
+15:26:01  Registered adapter: postgres=1.10.2
+15:26:01  Found 9 models, 33 data tests, 7 sources, 477 macros
+15:26:01  
+15:26:01  Concurrency: 2 threads (target='dev')
+15:26:01  
+15:26:01  1 of 8 START sql view model dbt_dev_staging.stg_fournisseur__fournisseurs ...... [RUN]
+15:26:01  2 of 8 START sql view model dbt_dev_staging.stg_fournisseur__offres ............ [RUN]
+15:26:02  2 of 8 OK created sql view model dbt_dev_staging.stg_fournisseur__offres ....... [CREATE VIEW in 0.08s]
+15:26:02  1 of 8 OK created sql view model dbt_dev_staging.stg_fournisseur__fournisseurs . [CREATE VIEW in 0.08s]
+15:26:02  3 of 8 START sql view model dbt_dev_staging.stg_nova__categories ............... [RUN]
+15:26:02  4 of 8 START sql view model dbt_dev_staging.stg_nova__order_lines .............. [RUN]
+15:26:02  3 of 8 OK created sql view model dbt_dev_staging.stg_nova__categories .......... [CREATE VIEW in 0.02s]
+15:26:02  4 of 8 OK created sql view model dbt_dev_staging.stg_nova__order_lines ......... [CREATE VIEW in 0.02s]
+15:26:02  5 of 8 START sql view model dbt_dev_staging.stg_nova__products ................. [RUN]
+15:26:02  6 of 8 START sql view model dbt_dev_intermediate.int_ventes__par_produit ....... [RUN]
+15:26:02  5 of 8 OK created sql view model dbt_dev_staging.stg_nova__products ............ [CREATE VIEW in 0.02s]
+15:26:02  6 of 8 OK created sql view model dbt_dev_intermediate.int_ventes__par_produit .. [CREATE VIEW in 0.02s]
+15:26:02  7 of 8 START sql view model dbt_dev_intermediate.int_offres__enrichies ......... [RUN]
+15:26:02  7 of 8 OK created sql view model dbt_dev_intermediate.int_offres__enrichies .... [CREATE VIEW in 0.02s]
+15:26:02  8 of 8 START sql table model dbt_dev_marts.mart_offres_par_produit ............. [RUN]
+15:26:02  8 of 8 OK created sql table model dbt_dev_marts.mart_offres_par_produit ........ [SELECT 24 in 0.03s]
+15:26:02  
+15:26:02  Finished running 1 table model, 7 view models in 0 hours 0 minutes and 0.27 seconds (0.27s).
+15:26:02  
+15:26:02  Completed successfully
+15:26:02  
+15:26:02  Done. PASS=8 WARN=0 ERROR=0 SKIP=0 NO-OP=0 TOTAL=8
+
+### dbt build
+ Container novamarket-s1-dbt-run-e7a9e43c7f3c Creating 
+ Container novamarket-s1-dbt-run-e7a9e43c7f3c Created 
+15:26:03  Running with dbt=1.11.17
+15:26:03  Registered adapter: postgres=1.10.2
+15:26:03  Found 9 models, 33 data tests, 7 sources, 477 macros
+15:26:03  
+15:26:03  Concurrency: 2 threads (target='dev')
+15:26:03  
+15:26:03  1 of 41 START sql view model dbt_dev_staging.stg_fournisseur__fournisseurs ..... [RUN]
+15:26:03  2 of 41 START sql view model dbt_dev_staging.stg_fournisseur__offres ........... [RUN]
+15:26:03  2 of 41 OK created sql view model dbt_dev_staging.stg_fournisseur__offres ...... [CREATE VIEW in 0.08s]
+15:26:03  1 of 41 OK created sql view model dbt_dev_staging.stg_fournisseur__fournisseurs  [CREATE VIEW in 0.08s]
+15:26:03  3 of 41 START sql view model dbt_dev_staging.stg_nova__categories .............. [RUN]
+15:26:03  4 of 41 START sql view model dbt_dev_staging.stg_nova__order_lines ............. [RUN]
+15:26:03  3 of 41 OK created sql view model dbt_dev_staging.stg_nova__categories ......... [CREATE VIEW in 0.03s]
+15:26:03  5 of 41 START sql view model dbt_dev_staging.stg_nova__products ................ [RUN]
+15:26:03  4 of 41 OK created sql view model dbt_dev_staging.stg_nova__order_lines ........ [CREATE VIEW in 0.03s]
+15:26:03  6 of 41 START test accepted_values_stg_fournisseur__offres_currency__EUR ....... [RUN]
+15:26:03  6 of 41 PASS accepted_values_stg_fournisseur__offres_currency__EUR ............. [PASS in 0.03s]
+15:26:03  7 of 41 START test assert_offres_grain_unique .................................. [RUN]
+15:26:03  5 of 41 OK created sql view model dbt_dev_staging.stg_nova__products ........... [CREATE VIEW in 0.04s]
+15:26:03  8 of 41 START test assert_valeurs_offres_plausibles ............................ [RUN]
+15:26:03  7 of 41 PASS assert_offres_grain_unique ........................................ [PASS in 0.02s]
+15:26:03  9 of 41 START test not_null_stg_fournisseur__offres_available_units ............ [RUN]
+15:26:03  8 of 41 PASS assert_valeurs_offres_plausibles .................................. [PASS in 0.01s]
+15:26:03  10 of 41 START test not_null_stg_fournisseur__offres_observed_on ............... [RUN]
+15:26:03  9 of 41 PASS not_null_stg_fournisseur__offres_available_units .................. [PASS in 0.02s]
+15:26:03  10 of 41 PASS not_null_stg_fournisseur__offres_observed_on ..................... [PASS in 0.01s]
+15:26:03  11 of 41 START test not_null_stg_fournisseur__offres_offer_id .................. [RUN]
+15:26:03  12 of 41 START test not_null_stg_fournisseur__offres_price_cents ............... [RUN]
+15:26:03  11 of 41 PASS not_null_stg_fournisseur__offres_offer_id ........................ [PASS in 0.02s]
+15:26:03  12 of 41 PASS not_null_stg_fournisseur__offres_price_cents ..................... [PASS in 0.02s]
+15:26:03  13 of 41 START test not_null_stg_fournisseur__offres_product_id ................ [RUN]
+15:26:03  14 of 41 START test not_null_stg_fournisseur__offres_supplier_id ............... [RUN]
+15:26:03  13 of 41 PASS not_null_stg_fournisseur__offres_product_id ...................... [PASS in 0.02s]
+15:26:03  14 of 41 PASS not_null_stg_fournisseur__offres_supplier_id ..................... [PASS in 0.02s]
+15:26:03  15 of 41 START test not_null_stg_fournisseur__fournisseurs_supplier_id ......... [RUN]
+15:26:03  16 of 41 START test relationships_stg_fournisseur__offres_supplier_id__supplier_id__ref_stg_fournisseur__fournisseurs_  [RUN]
+15:26:03  16 of 41 PASS relationships_stg_fournisseur__offres_supplier_id__supplier_id__ref_stg_fournisseur__fournisseurs_  [PASS in 0.02s]
+15:26:03  15 of 41 PASS not_null_stg_fournisseur__fournisseurs_supplier_id ............... [PASS in 0.02s]
+15:26:03  17 of 41 START test unique_stg_fournisseur__fournisseurs_supplier_id ........... [RUN]
+15:26:03  18 of 41 START test not_null_stg_nova__categories_category_id .................. [RUN]
+15:26:03  18 of 41 PASS not_null_stg_nova__categories_category_id ........................ [PASS in 0.02s]
+15:26:03  19 of 41 START test unique_stg_nova__categories_category_id .................... [RUN]
+15:26:03  17 of 41 PASS unique_stg_fournisseur__fournisseurs_supplier_id ................. [PASS in 0.02s]
+15:26:03  20 of 41 START test accepted_values_stg_nova__order_lines_order_status__completed__pending__cancelled  [RUN]
+15:26:03  19 of 41 PASS unique_stg_nova__categories_category_id .......................... [PASS in 0.02s]
+15:26:03  21 of 41 START test not_null_stg_nova__order_lines_order_item_id ............... [RUN]
+15:26:03  20 of 41 PASS accepted_values_stg_nova__order_lines_order_status__completed__pending__cancelled  [PASS in 0.02s]
+15:26:03  22 of 41 START test unique_stg_nova__order_lines_order_item_id ................. [RUN]
+15:26:03  21 of 41 PASS not_null_stg_nova__order_lines_order_item_id ..................... [PASS in 0.02s]
+15:26:03  22 of 41 PASS unique_stg_nova__order_lines_order_item_id ....................... [PASS in 0.01s]
+15:26:03  23 of 41 START test not_null_stg_nova__products_product_id ..................... [RUN]
+15:26:03  24 of 41 START test relationships_stg_fournisseur__offres_product_id__product_id__ref_stg_nova__products_  [RUN]
+15:26:03  23 of 41 PASS not_null_stg_nova__products_product_id ........................... [PASS in 0.02s]
+15:26:03  24 of 41 PASS relationships_stg_fournisseur__offres_product_id__product_id__ref_stg_nova__products_  [PASS in 0.02s]
+15:26:03  25 of 41 START test relationships_stg_nova__order_lines_product_id__product_id__ref_stg_nova__products_  [RUN]
+15:26:03  26 of 41 START test relationships_stg_nova__products_category_id__category_id__ref_stg_nova__categories_  [RUN]
+15:26:03  25 of 41 PASS relationships_stg_nova__order_lines_product_id__product_id__ref_stg_nova__products_  [PASS in 0.02s]
+15:26:03  26 of 41 PASS relationships_stg_nova__products_category_id__category_id__ref_stg_nova__categories_  [PASS in 0.02s]
+15:26:03  28 of 41 START sql view model dbt_dev_intermediate.int_ventes__par_produit ..... [RUN]
+15:26:03  27 of 41 START test unique_stg_nova__products_product_id ....................... [RUN]
+15:26:03  27 of 41 PASS unique_stg_nova__products_product_id ............................. [PASS in 0.02s]
+15:26:03  29 of 41 START sql view model dbt_dev_intermediate.int_offres__enrichies ....... [RUN]
+15:26:03  28 of 41 OK created sql view model dbt_dev_intermediate.int_ventes__par_produit  [CREATE VIEW in 0.02s]
+15:26:03  30 of 41 START test not_null_int_ventes__par_produit_product_id ................ [RUN]
+15:26:03  30 of 41 PASS not_null_int_ventes__par_produit_product_id ...................... [PASS in 0.01s]
+15:26:03  29 of 41 OK created sql view model dbt_dev_intermediate.int_offres__enrichies .. [CREATE VIEW in 0.02s]
+15:26:03  31 of 41 START test unique_int_ventes__par_produit_product_id .................. [RUN]
+15:26:03  32 of 41 START test assert_volumes_offres ...................................... [RUN]
+15:26:03  31 of 41 PASS unique_int_ventes__par_produit_product_id ........................ [PASS in 0.01s]
+15:26:03  32 of 41 PASS assert_volumes_offres ............................................ [PASS in 0.01s]
+15:26:03  33 of 41 START sql table model dbt_dev_marts.mart_offres_par_produit ........... [RUN]
+15:26:03  33 of 41 OK created sql table model dbt_dev_marts.mart_offres_par_produit ...... [SELECT 24 in 0.04s]
+15:26:03  34 of 41 START test accepted_values_mart_offres_par_produit_coverage_status__offre_et_ventes__offre_sans_vente__vendu_sans_offre__ni_offre_ni_vente  [RUN]
+15:26:03  35 of 41 START test assert_ca_reference_s2 ..................................... [RUN]
+15:26:03  35 of 41 PASS assert_ca_reference_s2 ........................................... [PASS in 0.01s]
+15:26:03  36 of 41 START test assert_mart_sans_multiplication ............................ [RUN]
+15:26:03  34 of 41 PASS accepted_values_mart_offres_par_produit_coverage_status__offre_et_ventes__offre_sans_vente__vendu_sans_offre__ni_offre_ni_vente  [PASS in 0.02s]
+15:26:03  37 of 41 START test not_null_mart_offres_par_produit_coverage_status ........... [RUN]
+15:26:03  37 of 41 PASS not_null_mart_offres_par_produit_coverage_status ................. [PASS in 0.01s]
+15:26:03  36 of 41 PASS assert_mart_sans_multiplication .................................. [PASS in 0.02s]
+15:26:03  38 of 41 START test not_null_mart_offres_par_produit_product_id ................ [RUN]
+15:26:03  39 of 41 START test relationships_mart_offres_par_produit_best_supplier_id__supplier_id__ref_stg_fournisseur__fournisseurs_  [RUN]
+15:26:04  38 of 41 PASS not_null_mart_offres_par_produit_product_id ...................... [PASS in 0.01s]
+15:26:04  39 of 41 PASS relationships_mart_offres_par_produit_best_supplier_id__supplier_id__ref_stg_fournisseur__fournisseurs_  [PASS in 0.02s]
+15:26:04  40 of 41 START test relationships_mart_offres_par_produit_product_id__product_id__ref_stg_nova__products_  [RUN]
+15:26:04  41 of 41 START test unique_mart_offres_par_produit_product_id .................. [RUN]
+15:26:04  40 of 41 PASS relationships_mart_offres_par_produit_product_id__product_id__ref_stg_nova__products_  [PASS in 0.02s]
+15:26:04  41 of 41 PASS unique_mart_offres_par_produit_product_id ........................ [PASS in 0.01s]
+15:26:04  
+15:26:04  Finished running 1 table model, 33 data tests, 7 view models in 0 hours 0 minutes and 0.57 seconds (0.57s).
+15:26:04  
+15:26:04  Completed successfully
+15:26:04  
+15:26:04  Done. PASS=41 WARN=0 ERROR=0 SKIP=0 NO-OP=0 TOTAL=41

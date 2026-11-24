@@ -1,0 +1,29 @@
+version: 2
+
+models:
+  - name: mart_offres_par_produit
+    description: >
+      Une ligne par produit du catalogue : offres fournisseurs actives (dernière
+      observation de chaque offre), meilleur prix, stock annoncé, ventes S1 et
+      écart prix de vente moyen - meilleur prix fournisseur.
+    columns:
+      - name: product_id
+        data_tests:
+          - unique
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('stg_nova__products')
+                field: product_id
+      - name: best_supplier_id
+        data_tests:
+          - relationships:
+              arguments:
+                to: ref('stg_fournisseur__fournisseurs')
+                field: supplier_id
+      - name: coverage_status
+        data_tests:
+          - not_null
+          - accepted_values:
+              arguments:
+                values: ['offre_et_ventes', 'offre_sans_vente', 'vendu_sans_offre', 'ni_offre_ni_vente']

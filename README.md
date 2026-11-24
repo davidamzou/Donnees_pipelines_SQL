@@ -32,6 +32,12 @@ Travaux pratiques SQL (S1 → S6) sur PostgreSQL 17, avec dbt (S4–S5) et Metab
 │   │   ├── src/           # collecteur.py, validation.py, journalisation.py
 │   │   ├── tests/         # disponibilite.py + tests unitaires et d'intégration
 │   │   └── data/          # raw/ valid/ rejected/ logs/ bilans/ (runs de référence)
+│   ├── transformation/    # S4 · chargeur PostgreSQL + projet dbt unique
+│   │   ├── SOLUTION_S4.md
+│   │   ├── chargement_postgres.py, sql/, exemple_lots/, run_s4.sh
+│   │   ├── dbt/           # sources, staging, intermediate, marts, tests (monté sur /projet)
+│   │   └── resultats/     # preuves : chargement, rejeu, atomicité, dbt build, volumes
+│   ├── s4/                # support formateur : image dbt + exemple des cuves (travail/ ignoré)
 │   ├── requirements-v3.txt # dépendances Python 3.12 (aiohttp, psycopg)
 │   ├── REFERENCE_SQL.md   # Référence cumulative (version S2)
 │   └── SAUVEGARDE_SQL.md  # Sauvegarde / restauration
@@ -100,3 +106,14 @@ docker compose run --rm --entrypoint python collecteur -m unittest discover -s i
 ```
 
 Résultat attendu sur `atelier` : 24 offres examinées, 20 valides publiées dans `ingestion/data/valid/offres.jsonl` (entrée de S4), 4 rejets motivés. Détails : [CONTRAT](novamarket/ingestion/CONTRAT.md) · [SOLUTION_S3_INGESTION](novamarket/ingestion/SOLUTION_S3_INGESTION.md)
+
+## S4 · Chargement PostgreSQL et dbt
+
+Depuis `novamarket/`, après S1/S2 et S3. Le mot de passe local se saisit dans la session, jamais dans un fichier :
+
+```bash
+read -rs PGPASSWORD; echo; export PGPASSWORD DBT_ENV_SECRET_PASSWORD="$PGPASSWORD"
+./transformation/run_s4.sh --reinitialiser
+```
+
+Charge `ingestion/data/valid/offres.jsonl` dans `fournisseur.offres` (grain : offre × jour), rejoue le lot (20 réutilisées, 0 doublon), prouve l'atomicité, puis exécute `dbt compile / run / build` (PASS=41). Détails et preuves : [SOLUTION_S4](novamarket/transformation/SOLUTION_S4.md)

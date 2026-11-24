@@ -1,0 +1,8 @@
+{"offer_id": "O002", "supplier_id": "F02", "product_id": 2, "price_cents": 750, "currency": "EUR", "available_units": 4, "observed_on": "2026-11-24"}
+{"offer_id": "O002", "supplier_id": "F02", "product_id": 2, "price_cents": 750, "currency": "EUR", "available_units": 4, "observed_on": "2026-11-24"}
+{"offer_id": "X01", "supplier_id": "F01", "product_id": 9999, "price_cents": 500, "currency": "EUR", "available_units": 1, "observed_on": "2026-11-24"}
+{"offer_id": "X02", "supplier_id": "F09", "product_id": 1, "price_cents": 500, "currency": "EUR", "available_units": 1, "observed_on": "2026-11-24"}
+{"offer_id": "X03", "supplier_id": "F01", "product_id": 1, "price_cents": "5,00", "currency": "USD", "available_units": -1, "observed_on": "2026-11-24"}
+{"offer_id": "X04", "supplier_id": "F01", "product_id": 1, "price_cents": 500, "currency": "EUR", "available_units": 1, "observed_on": "2027-01-15"}
+{"offer_id": "X05", "supplier_id": "F01", "product_id": 1, "price_cents": 500, "currency": "EUR", "available_units": 1, "observed_on": "2026-02-30"}
+{"offer_id": "X06", "supplier_id": "F01"

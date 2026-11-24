@@ -1,0 +1,61 @@
+--- Volumes par couche (grain entre parenthèses)
+                     relation                      | lignes 
+---------------------------------------------------+--------
+ source fournisseur.offres (offre x jour)          |     20
+ staging stg_fournisseur__offres (offre x jour)    |     20
+ intermediate int_offres__enrichies (offre x jour) |     20
+ offres distinctes (offre)                         |     20
+ catalogue nova.products (produit)                 |     24
+ mart mart_offres_par_produit (produit)            |     24
+
+--- Totaux du mart = totaux amont (pas de multiplication par les jointures)
+ offres_mart | offres_source | ca_mart_cents | ca_s2_cents 
+-------------+---------------+---------------+-------------
+          20 |            20 |       2621000 |     2621000
+
+--- Couverture du catalogue
+ coverage_status  | produits | offres 
+------------------+----------+--------
+ offre_et_ventes  |       20 |     20
+ vendu_sans_offre |        4 |      0
+
+--- Mart complet
+ product_id | product_name | category_name | offres | fournisseur | prix_min | stock | qte_vendue | prix_vente_moy | ecart | coverage_status  
+------------+--------------+---------------+--------+-------------+----------+-------+------------+----------------+-------+------------------
+          1 | Article 01   | Rangement     |      1 | F01         |      625 |     2 |         52 |         625.00 |  0.00 | offre_et_ventes
+          2 | Article 02   | Rangement     |      1 | F02         |      750 |     4 |         78 |         750.00 |  0.00 | offre_et_ventes
+          3 | Article 03   | Rangement     |      1 | F03         |      875 |     6 |         27 |         875.00 |  0.00 | offre_et_ventes
+          4 | Article 04   | Rangement     |      1 | F01         |     1000 |     8 |         52 |        1000.00 |  0.00 | offre_et_ventes
+          5 | Article 05   | Outillage     |      0 |             |          |     0 |         78 |        1125.00 |       | vendu_sans_offre
+          6 | Article 06   | Outillage     |      1 | F03         |     1250 |    12 |         27 |        1250.00 |  0.00 | offre_et_ventes
+          7 | Article 07   | Outillage     |      1 | F01         |     1375 |    14 |         52 |        1375.00 |  0.00 | offre_et_ventes
+          8 | Article 08   | Outillage     |      1 | F02         |     1500 |    16 |         78 |        1500.00 |  0.00 | offre_et_ventes
+          9 | Article 09   | Cuisine       |      1 | F03         |     1625 |    18 |         27 |        1625.00 |  0.00 | offre_et_ventes
+         10 | Article 10   | Cuisine       |      0 |             |          |     0 |         56 |        1750.00 |       | vendu_sans_offre
+         11 | Article 11   | Cuisine       |      1 | F02         |     1875 |    22 |         81 |        1875.00 |  0.00 | offre_et_ventes
+         12 | Article 12   | Cuisine       |      1 | F03         |     2000 |    24 |         27 |        2000.00 |  0.00 | offre_et_ventes
+         13 | Article 13   | Jardin        |      1 | F01         |     2125 |    26 |         56 |        2125.00 |  0.00 | offre_et_ventes
+         14 | Article 14   | Jardin        |      1 | F02         |     2250 |    28 |         81 |        2250.00 |  0.00 | offre_et_ventes
+         15 | Article 15   | Jardin        |      1 | F03         |     2375 |    30 |         27 |        2375.00 |  0.00 | offre_et_ventes
+         16 | Article 16   | Jardin        |      1 | F01         |     2500 |    32 |         56 |        2500.00 |  0.00 | offre_et_ventes
+         17 | Article 17   | Randonnée     |      0 |             |          |     0 |         81 |        2625.00 |       | vendu_sans_offre
+         18 | Article 18   | Randonnée     |      1 | F03         |     2750 |    36 |         26 |        2750.00 |  0.00 | offre_et_ventes
+         19 | Article 19   | Randonnée     |      1 | F01         |     2875 |    38 |         52 |        2875.00 |  0.00 | offre_et_ventes
+         20 | Article 20   | Randonnée     |      1 | F02         |     3000 |    40 |         81 |        3000.00 |  0.00 | offre_et_ventes
+         21 | Article 21   | Jeux de table |      1 | F03         |     3125 |    42 |         26 |        3125.00 |  0.00 | offre_et_ventes
+         22 | Article 22   | Jeux de table |      1 | F01         |     3250 |    44 |         52 |        3250.00 |  0.00 | offre_et_ventes
+         23 | Article 23   | Jeux de table |      1 | F02         |     3375 |    46 |         81 |        3375.00 |  0.00 | offre_et_ventes
+         24 | Article 24   | Jeux de table |      0 |             |          |     0 |         26 |        3500.00 |       | vendu_sans_offre
+
+--- Matérialisations créées par dbt (l éphémère n apparaît pas)
+     table_schema     |          table_name           | table_type 
+----------------------+-------------------------------+------------
+ dbt_dev_intermediate | int_offres__enrichies         | VIEW
+ dbt_dev_intermediate | int_ventes__par_produit       | VIEW
+ dbt_dev_marts        | mart_offres_par_produit       | BASE TABLE
+ dbt_dev_staging      | stg_fournisseur__fournisseurs | VIEW
+ dbt_dev_staging      | stg_fournisseur__offres       | VIEW
+ dbt_dev_staging      | stg_nova__categories          | VIEW
+ dbt_dev_staging      | stg_nova__order_lines         | VIEW
+ dbt_dev_staging      | stg_nova__products            | VIEW
+

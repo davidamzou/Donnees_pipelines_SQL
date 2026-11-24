@@ -1,0 +1,13 @@
+ lot_id | statut  | lues | inserees | mises_a_jour | reutilisees | rejetees |                      source                      |                     erreur                      
+--------+---------+------+----------+--------------+-------------+----------+--------------------------------------------------+-------------------------------------------------
+      1 | termine |   20 |       20 |            0 |           0 |        0 | atelier-20261124-124308                          | 
+      2 | termine |   20 |        0 |            0 |          20 |        0 | atelier-20261124-124308                          | 
+      4 | annule  |    0 |        0 |            0 |           0 |        0 | transformation/exemple_lots/jour_precedent.jsonl | PanneSimulee: panne simulée après 1 écriture(s)
+(3 rows)
+
+ lot_id |   action   | count 
+--------+------------+-------
+      1 | inseree    |    20
+      2 | reutilisee |    20
+(2 rows)
+
