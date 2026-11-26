@@ -1,0 +1,31 @@
+$ timeout -s INT 6 python volumetrie/streaming/extraire.py --limite 2000000 --sortie /tmp/interrompu.jsonl --bilan /tmp/interrompu_bilan.json
+KeyboardInterrupt
+$ ls /tmp/interrompu*
+/tmp/interrompu.jsonl.partiel
+/tmp/interrompu_bilan.json
+$ cat /tmp/interrompu_bilan.json
+{
+  "etape": "M2_extraction_streaming",
+  "statut": "interrompu",
+  "erreur": "KeyboardInterrupt: ",
+  "horodatage_utc": "2026-11-26T09:49:05+00:00",
+  "source": {
+    "repo": "DinoPonjevic/NYC_TaxiData",
+    "revision": "5941adbf8c0b9930e47002dc3103de3f9291360d",
+    "shard": "2024/yellow/yellow_tripdata_2024-01.parquet",
+    "columns": [
+      "Start_Zone",
+      "Trip_Distance",
+      "Trip_Duration"
+    ]
+  },
+  "limite": 2000000,
+  "parcourues": 57196,
+  "retenues": 57196,
+  "rejetees": 0,
+  "motifs_rejet": {},
+  "exemples_rejets": [],
+  "secondes": 5.1,
+  "lignes_par_seconde": 11172,
+  "sortie": null
+}

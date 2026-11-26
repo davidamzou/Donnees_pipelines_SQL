@@ -38,6 +38,14 @@ Travaux pratiques SQL (S1 → S6) sur PostgreSQL 17, avec dbt (S4–S5) et Metab
 │   │   ├── dbt/           # sources, staging, intermediate, marts, tests (monté sur /projet)
 │   │   └── resultats/     # preuves : chargement, rejeu, atomicité, dbt build, volumes
 │   ├── s4/                # support formateur : image dbt + exemple des cuves (travail/ ignoré)
+│   ├── volumetrie/        # S5 · streaming HF, PySpark, publication Hub
+│   │   ├── SOLUTION_S5.md
+│   │   ├── hf_datasets/   # source.json épinglé, acces.py, fiche_source.py (M1)
+│   │   ├── streaming/     # extraire.py (M2), controler.py (M3)
+│   │   ├── spark/         # pipeline.py (M4)
+│   │   ├── publication/   # preparer.py (M5 : Dataset Card + Parquet synthétique)
+│   │   ├── resultats/     # preuves : fiche, bilans, journaux Spark, cards v1/v2
+│   │   └── Dockerfile, run_s5.sh   # Python 3.12 + Java 21 ; data/ ignoré
 │   ├── requirements-v3.txt # dépendances Python 3.12 (aiohttp, psycopg)
 │   ├── REFERENCE_SQL.md   # Référence cumulative (version S2)
 │   └── SAUVEGARDE_SQL.md  # Sauvegarde / restauration
@@ -117,3 +125,15 @@ read -rs PGPASSWORD; echo; export PGPASSWORD DBT_ENV_SECRET_PASSWORD="$PGPASSWOR
 ```
 
 Charge `ingestion/data/valid/offres.jsonl` dans `fournisseur.offres` (grain : offre × jour), rejoue le lot (20 réutilisées, 0 doublon), prouve l'atomicité, puis exécute `dbt compile / run / build` (PASS=41). Détails et preuves : [SOLUTION_S4](novamarket/transformation/SOLUTION_S4.md)
+
+## S5 · Streaming Hugging Face, PySpark et Hub
+
+Depuis `novamarket/`. Sans Java 21 ni Python 3.12 en local, le service `volumetrie` les embarque :
+
+```bash
+export NOVAMARKET_UID=$(id -u) NOVAMARKET_GID=$(id -g)
+docker compose --profile volumetrie build volumetrie
+docker compose run --rm volumetrie volumetrie/run_s5.sh
+```
+
+Lit en streaming 200 000 lignes de la partition Yellow 2024-01 (révision épinglée, sans rapatrier les 39,35 Go du dépôt), applique les contrôles qualité (196 326 conformes, 3 674 rejets motivés), puis exécute le pipeline Spark : jointure aux zones TLC sans multiplication, agrégats, Parquet relu. Prépare ensuite `publication/` (jeu synthétique uniquement). La publication des deux révisions sur le Hub demande `hf auth login` avec son propre token. Détails et preuves : [SOLUTION_S5](novamarket/volumetrie/SOLUTION_S5.md)

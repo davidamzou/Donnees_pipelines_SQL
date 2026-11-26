@@ -1,0 +1,4 @@
+# Contexte de l image S5 : seuls requirements.txt et entree.sh sont copies.
+*
+!requirements.txt
+!entree.sh

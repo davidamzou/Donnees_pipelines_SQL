@@ -1,0 +1,27 @@
+{
+  "etape": "M2_extraction_streaming",
+  "statut": "termine",
+  "erreur": null,
+  "horodatage_utc": "2026-11-26T09:50:44+00:00",
+  "source": {
+    "repo": "DinoPonjevic/NYC_TaxiData",
+    "revision": "5941adbf8c0b9930e47002dc3103de3f9291360d",
+    "shard": "2024/yellow/yellow_tripdata_2024-01.parquet",
+    "columns": [
+      "Start_Zone",
+      "Trip_Distance",
+      "Trip_Duration"
+    ]
+  },
+  "limite": 200000,
+  "parcourues": 200000,
+  "retenues": 200000,
+  "rejetees": 0,
+  "motifs_rejet": {},
+  "exemples_rejets": [],
+  "secondes": 9.7,
+  "lignes_par_seconde": 20719,
+  "sortie": "volumetrie/data/extraction/trajets_extraits.jsonl",
+  "sha256_sortie": "fb555db850e1c9245110c78d95b5e36949d4ede16f5f88a09a832e8a33e11a1c",
+  "octets_sortie": 18767125
+}

@@ -1,0 +1,68 @@
+{
+  "etape": "M3_controle_qualite",
+  "horodatage_utc": "2026-11-26T09:50:45+00:00",
+  "entree": "volumetrie/data/extraction/trajets_extraits.jsonl",
+  "sha256_entree": "fb555db850e1c9245110c78d95b5e36949d4ede16f5f88a09a832e8a33e11a1c",
+  "sortie_spark": "volumetrie/data/spark/trajets_controles.jsonl",
+  "sha256_sortie": "63c93aac3f6e1bda6b743bb85595acc7ddcee0dcc76867c7b4de03631d77e971",
+  "rejets": "volumetrie/data/spark/trajets_rejetes.jsonl",
+  "regles": {
+    "distance_max_miles": 100,
+    "duree_max_secondes": 21600,
+    "vitesse_max_mph": 80,
+    "arrondi_distance": 2
+  },
+  "lues": 200000,
+  "conformes": 196326,
+  "rejetees": 3674,
+  "taux_rejet_pct": 1.837,
+  "motifs_rejet": {
+    "distance_non_positive": 3414,
+    "duree_aberrante": 180,
+    "vitesse_aberrante": 74,
+    "distance_aberrante": 5,
+    "duree_non_positive": 1
+  },
+  "statistiques_avant": {
+    "Start_Zone": {
+      "n": 200000,
+      "min": 1,
+      "max": 265,
+      "moyenne": 162.273
+    },
+    "Trip_Distance": {
+      "n": 200000,
+      "min": 0.0,
+      "max": 10879.28,
+      "moyenne": 4.094
+    },
+    "Trip_Duration": {
+      "n": 200000,
+      "min": -364,
+      "max": 112734,
+      "moyenne": 1007.939
+    }
+  },
+  "statistiques_apres": {
+    "Start_Zone": {
+      "n": 196326,
+      "min": 1,
+      "max": 265,
+      "moyenne": 162.363
+    },
+    "Trip_Distance": {
+      "n": 196326,
+      "min": 0.01,
+      "max": 97.12,
+      "moyenne": 4.097
+    },
+    "Trip_Duration": {
+      "n": 196326,
+      "min": 1,
+      "max": 17029,
+      "moyenne": 947.237
+    }
+  },
+  "zones_distinctes_avant": 235,
+  "zones_distinctes_apres": 234
+}

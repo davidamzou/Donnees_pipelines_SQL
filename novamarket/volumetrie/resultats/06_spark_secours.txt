@@ -1,0 +1,101 @@
+
+=== 1. Lecture et inspection des schémas ===
+Entrée : volumetrie/secours/trajets_fictifs.jsonl
+Schéma inféré par Spark (non retenu : types déduits d'un échantillon) :
+root
+ |-- Start_Zone: long (nullable = true)
+ |-- Trip_Distance: double (nullable = true)
+ |-- Trip_Duration: long (nullable = true)
+
+Schéma imposé à la lecture :
+root
+ |-- ligne_source: long (nullable = true)
+ |-- Start_Zone: long (nullable = true)
+ |-- Trip_Distance: double (nullable = true)
+ |-- Trip_Duration: long (nullable = true)
+ |-- _corrupt_record: string (nullable = true)
+
+root
+ |-- LocationID: string (nullable = true)
+ |-- Borough: string (nullable = true)
+ |-- Zone: string (nullable = true)
+ |-- service_zone: string (nullable = true)
+
+
+=== 2. Typage et contrôle des valeurs manquantes ===
+Lignes lues : 6 · lignes JSON corrompues : 0
+Valeurs manquantes par colonne : {'zone_depart': 0, 'distance_miles': 0, 'duree_s': 0}
+root
+ |-- ligne_source: long (nullable = false)
+ |-- zone_depart: integer (nullable = true)
+ |-- distance_miles: double (nullable = true)
+ |-- duree_s: integer (nullable = true)
+
+
+=== 3. Filtrage qualité et variable calculée ===
+Avant filtrage : 6 · après filtrage : 5 · écartées : 1
+Règles : 0 < distance <= 100 mi ; 0 < durée <= 21 600 s ; vitesse = distance / (durée/3600) <= 80 mph
+
+=== 4. Contrôle de la clé de la table de zones ===
+Zones : 265 lignes, 265 clés distinctes, 0 clé(s) nulle(s)
+Noms de zone partagés par plusieurs LocationID (=> ne jamais joindre sur le nom) :
++---------------------------------------------+-----+
+|zone                                         |count|
++---------------------------------------------+-----+
+|Corona                                       |2    |
+|Governor's Island/Ellis Island/Liberty Island|3    |
++---------------------------------------------+-----+
+
+
+=== 5. Non-appariements (anti-jointure) ===
+Trajets dont la zone de départ est absente de la table : 1
++-----------+-----+
+|zone_depart|count|
++-----------+-----+
+|        999|    1|
++-----------+-----+
+
+Trajets appariés à une zone non localisée (264 Unknown / 265 Outside of NYC) : 0
+
+=== 6. Jointure et contrôle des volumes ===
+Avant jointure : 5 · après jointure gauche : 5 · non appariés : 1
+OK : aucune multiplication (même effectif, ligne_source unique).
+
+=== 7. Agrégations ===
+=== 8. Partitionnement ===
+Partitions lecture JSONL : 1
+Partitions après jointure (broadcast, pas d'échange) : 1
+Partitions de l'agrégat (après échange + AQE) : 1
+
+=== 9. Export Parquet et relecture ===
+root
+ |-- arrondissement: string (nullable = true)
+ |-- nb_trajets: long (nullable = true)
+ |-- distance_totale_miles: double (nullable = true)
+ |-- distance_moyenne_miles: double (nullable = true)
+ |-- distance_mediane_miles: double (nullable = true)
+ |-- duree_moyenne_min: double (nullable = true)
+ |-- vitesse_ponderee_mph: double (nullable = true)
+ |-- part_trajets_pct: double (nullable = true)
+
++--------------+----------+---------------------+----------------------+----------------------+-----------------+--------------------+----------------+
+|arrondissement|nb_trajets|distance_totale_miles|distance_moyenne_miles|distance_mediane_miles|duree_moyenne_min|vitesse_ponderee_mph|part_trajets_pct|
++--------------+----------+---------------------+----------------------+----------------------+-----------------+--------------------+----------------+
+|Manhattan     |2         |4.5                  |2.25                  |1.5                   |9.17             |14.73               |40.0            |
+|EWR           |1         |2.5                  |2.5                   |2.5                   |10.0             |15.0                |20.0            |
+|Queens        |1         |4.0                  |4.0                   |4.0                   |15.0             |16.0                |20.0            |
+|Zone inconnue |1         |1.0                  |1.0                   |1.0                   |5.0              |12.0                |20.0            |
++--------------+----------+---------------------+----------------------+----------------------+-----------------+--------------------+----------------+
+
+Relecture : somme nb_trajets par arrondissement = 5, par zone = 5, attendu = 5 ; zones distinctes = 4
+Top 5 zones de départ :
++-----------+--------------+--------------+----------+----------------------+-----------------+--------------------+
+|zone_depart|arrondissement|zone          |nb_trajets|distance_moyenne_miles|duree_moyenne_min|vitesse_ponderee_mph|
++-----------+--------------+--------------+----------+----------------------+-----------------+--------------------+
+|4          |Manhattan     |Alphabet City |2         |2.25                  |9.17             |14.73               |
+|999        |Zone inconnue |NULL          |1         |1.0                   |5.0              |12.0                |
+|1          |EWR           |Newark Airport|1         |2.5                   |10.0             |15.0                |
+|7          |Queens        |Astoria       |1         |4.0                   |15.0             |16.0                |
++-----------+--------------+--------------+----------+----------------------+-----------------+--------------------+
+
+OK : Parquet écrit et relu dans /tmp/s5_secours_1795686531

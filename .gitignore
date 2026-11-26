@@ -32,3 +32,12 @@ logs/
 .venv/
 __pycache__/
 *.pyc
+
+# S5 · volumétrie : extraction (source sous licence « unknown », non republiée),
+# sorties Spark et dossier de publication Hub (régénéré par preparer.py)
+novamarket/volumetrie/data/
+novamarket/publication/
+spark-warehouse/
+metastore_db/
+derby.log
+*.partiel

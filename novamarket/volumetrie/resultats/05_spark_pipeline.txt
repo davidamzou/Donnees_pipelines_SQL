@@ -1,0 +1,300 @@
+
+=== 1. Lecture et inspection des schémas ===
+Entrée : /work/volumetrie/data/spark/trajets_controles.jsonl
+Schéma inféré par Spark (non retenu : types déduits d'un échantillon) :
+root
+ |-- Start_Zone: long (nullable = true)
+ |-- Trip_Distance: double (nullable = true)
+ |-- Trip_Duration: long (nullable = true)
+ |-- ligne_source: long (nullable = true)
+
+Schéma imposé à la lecture :
+root
+ |-- ligne_source: long (nullable = true)
+ |-- Start_Zone: long (nullable = true)
+ |-- Trip_Distance: double (nullable = true)
+ |-- Trip_Duration: long (nullable = true)
+ |-- _corrupt_record: string (nullable = true)
+
+root
+ |-- LocationID: string (nullable = true)
+ |-- Borough: string (nullable = true)
+ |-- Zone: string (nullable = true)
+ |-- service_zone: string (nullable = true)
+
+
+=== 2. Typage et contrôle des valeurs manquantes ===
+Lignes lues : 196326 · lignes JSON corrompues : 0
+Valeurs manquantes par colonne : {'zone_depart': 0, 'distance_miles': 0, 'duree_s': 0}
+root
+ |-- ligne_source: long (nullable = false)
+ |-- zone_depart: integer (nullable = true)
+ |-- distance_miles: double (nullable = true)
+ |-- duree_s: integer (nullable = true)
+
+
+=== 3. Filtrage qualité et variable calculée ===
+Avant filtrage : 196326 · après filtrage : 196326 · écartées : 0
+Règles : 0 < distance <= 100 mi ; 0 < durée <= 21 600 s ; vitesse = distance / (durée/3600) <= 80 mph
+
+=== 4. Contrôle de la clé de la table de zones ===
+Zones : 265 lignes, 265 clés distinctes, 0 clé(s) nulle(s)
+Noms de zone partagés par plusieurs LocationID (=> ne jamais joindre sur le nom) :
++---------------------------------------------+-----+
+|zone                                         |count|
++---------------------------------------------+-----+
+|Corona                                       |2    |
+|Governor's Island/Ellis Island/Liberty Island|3    |
++---------------------------------------------+-----+
+
+
+=== 5. Non-appariements (anti-jointure) ===
+Trajets dont la zone de départ est absente de la table : 0
++-----------+-----+
+|zone_depart|count|
++-----------+-----+
++-----------+-----+
+
+Trajets appariés à une zone non localisée (264 Unknown / 265 Outside of NYC) : 786
+
+=== 6. Jointure et contrôle des volumes ===
+Avant jointure : 196326 · après jointure gauche : 196326 · non appariés : 0
+OK : aucune multiplication (même effectif, ligne_source unique).
+
+=== 7. Agrégations ===
+Plan d'exécution (agrégat par arrondissement) :
+== Physical Plan ==
+AdaptiveSparkPlan (33)
++- Sort (32)
+   +- Exchange (31)
+      +- Project (30)
+         +- ObjectHashAggregate (29)
+            +- Exchange (28)
+               +- ObjectHashAggregate (27)
+                  +- InMemoryTableScan (1)
+                        +- InMemoryRelation (2)
+                              +- AdaptiveSparkPlan (26)
+                                 +- == Final Plan ==
+                                    ResultQueryStage (20)
+                                    +- * Project (19)
+                                       +- * BroadcastHashJoin LeftOuter BuildRight (18)
+                                          :- TableCacheQueryStage (12), Statistics(sizeInBytes=6.0 MiB, rowCount=1.96E+5)
+                                          :  +- InMemoryTableScan (3) (columnarIn=false, columnarOut=true)
+                                          :        +- InMemoryRelation (4)
+                                          :              +- * Project (11)
+                                          :                 +- * Filter (10)
+                                          :                    +- * Project (9)
+                                          :                       +- * Filter (8)
+                                          :                          +- InMemoryTableScan (5)
+                                          :                                +- InMemoryRelation (6)
+                                          :                                      +- Scan json  (7)
+                                          +- BroadcastQueryStage (17), Statistics(sizeInBytes=1026.1 KiB, rowCount=265)
+                                             +- BroadcastExchange (16)
+                                                +- * Project (15)
+                                                   +- * Filter (14)
+                                                      +- Scan csv  (13)
+                                 +- == Initial Plan ==
+                                    Project (25)
+                                    +- BroadcastHashJoin LeftOuter BuildRight (24)
+                                       :- InMemoryTableScan (3) (columnarIn=false, columnarOut=true)
+                                       :     +- InMemoryRelation (4)
+                                       :           +- * Project (11)
+                                       :              +- * Filter (10)
+                                       :                 +- * Project (9)
+                                       :                    +- * Filter (8)
+                                       :                       +- InMemoryTableScan (5)
+                                       :                             +- InMemoryRelation (6)
+                                       :                                   +- Scan json  (7)
+                                       +- BroadcastExchange (23)
+                                          +- Project (22)
+                                             +- Filter (21)
+                                                +- Scan csv  (13)
+
+
+(1) InMemoryTableScan
+Output [3]: [distance_miles#337, duree_s#338, arrondissement#1212]
+Arguments: [distance_miles#337, duree_s#338, arrondissement#1212]
+
+(2) InMemoryRelation
+Arguments: [ligne_source#335L, zone_depart#336, distance_miles#337, duree_s#338, vitesse_mph#489, arrondissement#1212, zone#487, service_zone#35], StorageLevel(disk, memory, deserialized, 1 replicas)
+
+(3) InMemoryTableScan
+Output [5]: [ligne_source#335L, zone_depart#336, distance_miles#337, duree_s#338, vitesse_mph#489]
+Arguments: [ligne_source#335L, zone_depart#336, distance_miles#337, duree_s#338, vitesse_mph#489]
+
+(4) InMemoryRelation
+Arguments: [ligne_source#335L, zone_depart#336, distance_miles#337, duree_s#338, vitesse_mph#489], StorageLevel(disk, memory, deserialized, 1 replicas)
+
+(5) InMemoryTableScan
+Output [5]: [Start_Zone#11L, Trip_Distance#12, Trip_Duration#13L, _corrupt_record#14, ligne_source#10L]
+Arguments: [Start_Zone#11L, Trip_Distance#12, Trip_Duration#13L, _corrupt_record#14, ligne_source#10L], [isnull(_corrupt_record#14)]
+
+(6) InMemoryRelation
+Arguments: [ligne_source#10L, Start_Zone#11L, Trip_Distance#12, Trip_Duration#13L, _corrupt_record#14], StorageLevel(disk, memory, deserialized, 1 replicas)
+
+(7) Scan json 
+Output [5]: [ligne_source#10L, Start_Zone#11L, Trip_Distance#12, Trip_Duration#13L, _corrupt_record#14]
+Batched: false
+Location: InMemoryFileIndex [file:/work/volumetrie/data/spark/trajets_controles.jsonl]
+ReadSchema: struct<ligne_source:bigint,Start_Zone:bigint,Trip_Distance:double,Trip_Duration:bigint,_corrupt_record:string>
+
+(8) Filter [codegen id : 1]
+Input [5]: [Start_Zone#11L, Trip_Distance#12, Trip_Duration#13L, _corrupt_record#14, ligne_source#10L]
+Condition : isnull(_corrupt_record#14)
+
+(9) Project [codegen id : 1]
+Output [4]: [coalesce(ligne_source#10L, monotonically_increasing_id()) AS ligne_source#335L, cast(Start_Zone#11L as int) AS zone_depart#336, Trip_Distance#12 AS distance_miles#337, cast(Trip_Duration#13L as int) AS duree_s#338]
+Input [5]: [Start_Zone#11L, Trip_Distance#12, Trip_Duration#13L, _corrupt_record#14, ligne_source#10L]
+
+(10) Filter [codegen id : 1]
+Input [4]: [ligne_source#335L, zone_depart#336, distance_miles#337, duree_s#338]
+Condition : ((((isnotnull(zone_depart#336) AND isnotnull(distance_miles#337)) AND isnotnull(duree_s#338)) AND ((distance_miles#337 > 0.0) AND (distance_miles#337 <= 100.0))) AND (((duree_s#338 > 0) AND (duree_s#338 <= 21600)) AND ((distance_miles#337 / (cast(duree_s#338 as double) / 3600.0)) <= 80.0)))
+
+(11) Project [codegen id : 1]
+Output [5]: [ligne_source#335L, zone_depart#336, distance_miles#337, duree_s#338, (distance_miles#337 / (cast(duree_s#338 as double) / 3600.0)) AS vitesse_mph#489]
+Input [4]: [ligne_source#335L, zone_depart#336, distance_miles#337, duree_s#338]
+
+(12) TableCacheQueryStage
+Output [5]: [ligne_source#335L, zone_depart#336, distance_miles#337, duree_s#338, vitesse_mph#489]
+Arguments: 0
+
+(13) Scan csv 
+Output [4]: [LocationID#32, Borough#33, Zone#34, service_zone#35]
+Batched: false
+Location: InMemoryFileIndex [file:/work/volumetrie/secours/zones.csv]
+ReadSchema: struct<LocationID:string,Borough:string,Zone:string,service_zone:string>
+
+(14) Filter [codegen id : 1]
+Input [4]: [LocationID#32, Borough#33, Zone#34, service_zone#35]
+Condition : isnotnull(cast(LocationID#32 as int))
+
+(15) Project [codegen id : 1]
+Output [4]: [cast(LocationID#32 as int) AS zone_id#485, Borough#33 AS arrondissement#486, Zone#34 AS zone#487, service_zone#35]
+Input [4]: [LocationID#32, Borough#33, Zone#34, service_zone#35]
+
+(16) BroadcastExchange
+Input [4]: [zone_id#485, arrondissement#486, zone#487, service_zone#35]
+Arguments: HashedRelationBroadcastMode(List(cast(input[0, int, true] as bigint)),false), [plan_id=792]
+
+(17) BroadcastQueryStage
+Output [4]: [zone_id#485, arrondissement#486, zone#487, service_zone#35]
+Arguments: 1
+
+(18) BroadcastHashJoin [codegen id : 2]
+Left keys [1]: [zone_depart#336]
+Right keys [1]: [zone_id#485]
+Join type: LeftOuter
+Join condition: None
+
+(19) Project [codegen id : 2]
+Output [8]: [ligne_source#335L, zone_depart#336, distance_miles#337, duree_s#338, vitesse_mph#489, coalesce(arrondissement#486, Zone inconnue) AS arrondissement#1212, zone#487, service_zone#35]
+Input [9]: [ligne_source#335L, zone_depart#336, distance_miles#337, duree_s#338, vitesse_mph#489, zone_id#485, arrondissement#486, zone#487, service_zone#35]
+
+(20) ResultQueryStage
+Output [8]: [ligne_source#335L, zone_depart#336, distance_miles#337, duree_s#338, vitesse_mph#489, arrondissement#1212, zone#487, service_zone#35]
+Arguments: 2
+
+(21) Filter
+Input [4]: [LocationID#32, Borough#33, Zone#34, service_zone#35]
+Condition : isnotnull(cast(LocationID#32 as int))
+
+(22) Project
+Output [4]: [cast(LocationID#32 as int) AS zone_id#485, Borough#33 AS arrondissement#486, Zone#34 AS zone#487, service_zone#35]
+Input [4]: [LocationID#32, Borough#33, Zone#34, service_zone#35]
+
+(23) BroadcastExchange
+Input [4]: [zone_id#485, arrondissement#486, zone#487, service_zone#35]
+Arguments: HashedRelationBroadcastMode(List(cast(input[0, int, true] as bigint)),false), [plan_id=757]
+
+(24) BroadcastHashJoin
+Left keys [1]: [zone_depart#336]
+Right keys [1]: [zone_id#485]
+Join type: LeftOuter
+Join condition: None
+
+(25) Project
+Output [8]: [ligne_source#335L, zone_depart#336, distance_miles#337, duree_s#338, vitesse_mph#489, coalesce(arrondissement#486, Zone inconnue) AS arrondissement#1212, zone#487, service_zone#35]
+Input [9]: [ligne_source#335L, zone_depart#336, distance_miles#337, duree_s#338, vitesse_mph#489, zone_id#485, arrondissement#486, zone#487, service_zone#35]
+
+(26) AdaptiveSparkPlan
+Output [8]: [ligne_source#335L, zone_depart#336, distance_miles#337, duree_s#338, vitesse_mph#489, arrondissement#1212, zone#487, service_zone#35]
+Arguments: isFinalPlan=true
+
+(27) ObjectHashAggregate
+Input [3]: [distance_miles#337, duree_s#338, arrondissement#1212]
+Keys [1]: [arrondissement#1212]
+Functions [6]: [partial_count(1), partial_sum(distance_miles#337), partial_avg(distance_miles#337), partial_percentile_approx(distance_miles#337, 0.5, 10000, 0, 0), partial_avg(duree_s#338), partial_sum(duree_s#338)]
+Aggregate Attributes [8]: [count#1916L, sum#1917, sum#1918, count#1919L, buf#1920, sum#1921, count#1922L, sum#1923L]
+Results [9]: [arrondissement#1212, count#1924L, sum#1925, sum#1926, count#1927L, buf#1928, sum#1929, count#1930L, sum#1931L]
+
+(28) Exchange
+Input [9]: [arrondissement#1212, count#1924L, sum#1925, sum#1926, count#1927L, buf#1928, sum#1929, count#1930L, sum#1931L]
+Arguments: hashpartitioning(arrondissement#1212, 4), ENSURE_REQUIREMENTS, [plan_id=990]
+
+(29) ObjectHashAggregate
+Input [9]: [arrondissement#1212, count#1924L, sum#1925, sum#1926, count#1927L, buf#1928, sum#1929, count#1930L, sum#1931L]
+Keys [1]: [arrondissement#1212]
+Functions [6]: [count(1), sum(distance_miles#337), avg(distance_miles#337), percentile_approx(distance_miles#337, 0.5, 10000, 0, 0), avg(duree_s#338), sum(duree_s#338)]
+Aggregate Attributes [6]: [count(1)#1788L, sum(distance_miles#337)#1789, avg(distance_miles#337)#1790, percentile_approx(distance_miles#337, 0.5, 10000, 0, 0)#1791, avg(duree_s#338)#1792, sum(duree_s#338)#1794L]
+Results [7]: [arrondissement#1212, count(1)#1788L AS nb_trajets#1774L, round(sum(distance_miles#337)#1789, 2) AS distance_totale_miles#1775, round(avg(distance_miles#337)#1790, 3) AS distance_moyenne_miles#1776, round(percentile_approx(distance_miles#337, 0.5, 10000, 0, 0)#1791, 2) AS distance_mediane_miles#1777, round((avg(duree_s#338)#1792 / 60.0), 2) AS duree_moyenne_min#1778, round((sum(distance_miles#337)#1789 / (cast(sum(duree_s#338)#1794L as double) / 3600.0)), 2) AS vitesse_ponderee_mph#1779]
+
+(30) Project
+Output [8]: [arrondissement#1212, nb_trajets#1774L, distance_totale_miles#1775, distance_moyenne_miles#1776, distance_mediane_miles#1777, duree_moyenne_min#1778, vitesse_ponderee_mph#1779, round((cast((nb_trajets#1774L * 100) as double) / 196326.0), 3) AS part_trajets_pct#1795]
+Input [7]: [arrondissement#1212, nb_trajets#1774L, distance_totale_miles#1775, distance_moyenne_miles#1776, distance_mediane_miles#1777, duree_moyenne_min#1778, vitesse_ponderee_mph#1779]
+
+(31) Exchange
+Input [8]: [arrondissement#1212, nb_trajets#1774L, distance_totale_miles#1775, distance_moyenne_miles#1776, distance_mediane_miles#1777, duree_moyenne_min#1778, vitesse_ponderee_mph#1779, part_trajets_pct#1795]
+Arguments: rangepartitioning(nb_trajets#1774L DESC NULLS LAST, 4), ENSURE_REQUIREMENTS, [plan_id=994]
+
+(32) Sort
+Input [8]: [arrondissement#1212, nb_trajets#1774L, distance_totale_miles#1775, distance_moyenne_miles#1776, distance_mediane_miles#1777, duree_moyenne_min#1778, vitesse_ponderee_mph#1779, part_trajets_pct#1795]
+Arguments: [nb_trajets#1774L DESC NULLS LAST], true, 0
+
+(33) AdaptiveSparkPlan
+Output [8]: [arrondissement#1212, nb_trajets#1774L, distance_totale_miles#1775, distance_moyenne_miles#1776, distance_mediane_miles#1777, duree_moyenne_min#1778, vitesse_ponderee_mph#1779, part_trajets_pct#1795]
+Arguments: isFinalPlan=false
+
+
+
+=== 8. Partitionnement ===
+Partitions lecture JSONL : 2
+Partitions après jointure (broadcast, pas d'échange) : 2
+Partitions de l'agrégat (après échange + AQE) : 1
+
+=== 9. Export Parquet et relecture ===
+root
+ |-- arrondissement: string (nullable = true)
+ |-- nb_trajets: long (nullable = true)
+ |-- distance_totale_miles: double (nullable = true)
+ |-- distance_moyenne_miles: double (nullable = true)
+ |-- distance_mediane_miles: double (nullable = true)
+ |-- duree_moyenne_min: double (nullable = true)
+ |-- vitesse_ponderee_mph: double (nullable = true)
+ |-- part_trajets_pct: double (nullable = true)
+
++--------------+----------+---------------------+----------------------+----------------------+-----------------+--------------------+----------------+
+|arrondissement|nb_trajets|distance_totale_miles|distance_moyenne_miles|distance_mediane_miles|duree_moyenne_min|vitesse_ponderee_mph|part_trajets_pct|
++--------------+----------+---------------------+----------------------+----------------------+-----------------+--------------------+----------------+
+|Manhattan     |167166    |438854.53            |2.625                 |1.64                  |13.07            |12.05               |85.147          |
+|Queens        |26175     |347838.65            |13.289                |12.2                  |31.75            |25.11               |13.332          |
+|Brooklyn      |1783      |10968.11             |6.151                 |4.49                  |30.69            |12.03               |0.908           |
+|Unknown       |730       |3082.84              |4.223                 |1.96                  |15.58            |16.27               |0.372           |
+|Bronx         |403       |3333.42              |8.272                 |7.43                  |39.2             |12.66               |0.205           |
+|N/A           |56        |257.76               |4.603                 |0.5                   |14.86            |18.59               |0.029           |
+|EWR           |10        |62.06                |6.206                 |0.06                  |13.63            |27.33               |0.005           |
+|Staten Island |3         |18.6                 |6.2                   |0.6                   |13.99            |26.59               |0.002           |
++--------------+----------+---------------------+----------------------+----------------------+-----------------+--------------------+----------------+
+
+Relecture : somme nb_trajets par arrondissement = 196326, par zone = 196326, attendu = 196326 ; zones distinctes = 234
+Top 5 zones de départ :
++-----------+--------------+----------------------------+----------+----------------------+-----------------+--------------------+
+|zone_depart|arrondissement|zone                        |nb_trajets|distance_moyenne_miles|duree_moyenne_min|vitesse_ponderee_mph|
++-----------+--------------+----------------------------+----------+----------------------+-----------------+--------------------+
+|132        |Queens        |JFK Airport                 |15563     |16.063                |36.84            |26.16               |
+|161        |Manhattan     |Midtown Center              |9335      |2.771                 |14.66            |11.34               |
+|237        |Manhattan     |Upper East Side South       |8173      |1.777                 |10.35            |10.3                |
+|186        |Manhattan     |Penn Station/Madison Sq West|8037      |2.524                 |14.74            |10.27               |
+|138        |Queens        |LaGuardia Airport           |8021      |9.526                 |24.05            |23.76               |
++-----------+--------------+----------------------------+----------+----------------------+-----------------+--------------------+
+only showing top 5 rows
+OK : Parquet écrit et relu dans volumetrie/data/sorties/yellow-2024-01-20261126-095025

@@ -1,0 +1,57 @@
+{
+  "depot": "DinoPonjevic/NYC_TaxiData",
+  "revision": "5941adbf8c0b9930e47002dc3103de3f9291360d",
+  "revision_conforme": true,
+  "licence_miroir": "unknown",
+  "fichiers_parquet": 371,
+  "octets_depot": 39350805895,
+  "octets_par_type": {
+    "fhvhv": 20631326659,
+    "green": 1249722817,
+    "yellow": 17469756419
+  },
+  "partition": "2024/yellow/yellow_tripdata_2024-01.parquet",
+  "octets_partition": 41899074,
+  "lignes_partition": 2964624,
+  "groupes_de_lignes": 3,
+  "lignes_groupe_0": 1048576,
+  "schema_partition": {
+    "Type": "string",
+    "Vendor_ID": "string",
+    "Request_Time": "timestamp[ns]",
+    "OnScene_Time": "timestamp[ns]",
+    "Trip_Start": "timestamp[us]",
+    "Trip_End": "timestamp[us]",
+    "Passengers": "int32",
+    "Start_Zone": "int32",
+    "End_Zone": "int32",
+    "Trip_Distance": "float",
+    "Payment_Type": "int32",
+    "Forward_Stored_Flag": "bool",
+    "Tip_Amount": "float",
+    "Trip_Duration": "int64"
+  },
+  "colonnes_projetees": [
+    "Start_Zone",
+    "Trip_Distance",
+    "Trip_Duration"
+  ],
+  "statistiques_groupe_0": {
+    "Start_Zone": {
+      "min_groupe_0": 1,
+      "max_groupe_0": 265,
+      "nuls_groupe_0": 0
+    },
+    "Trip_Distance": {
+      "min_groupe_0": -0.0,
+      "max_groupe_0": 10879.2802734375,
+      "nuls_groupe_0": 0
+    },
+    "Trip_Duration": {
+      "min_groupe_0": -697,
+      "max_groupe_0": 217306,
+      "nuls_groupe_0": 0
+    }
+  },
+  "createur_parquet": "parquet-cpp-arrow version 19.0.1"
+}
